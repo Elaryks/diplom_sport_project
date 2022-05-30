@@ -13,12 +13,12 @@ const AddTournamentDialog = (open: boolean, handleOk: () => void, handleCancel: 
       onCancel={handleCancel}
       footer={
         <>
-          <Button danger style={{ float: "left" }}>
-            Удалить
-          </Button>
+          {/*<Button danger style={{ float: "left" }}>*/}
+          {/*  Удалить*/}
+          {/*</Button>*/}
           <Button onClick={() => handleCancel()}>Отмена</Button>
           <Button onClick={() => handleOk()} type="primary">
-            Сохранить
+            Добавить
           </Button>
         </>
       }
