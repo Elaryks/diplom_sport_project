@@ -14,19 +14,27 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
     >
       <Form layout="vertical">
         <div className="d-stack spacing-2">
+          <Form.Item style={{ flex: 1 }} label="Соревнование">
+            <Select placeholder="Соревнование">
+              <Select.Option>Финал - Запад</Select.Option>
+            </Select>
+          </Form.Item>
+          <div style={{ flexBasis: "50%" }} className="d-stack spacing-2">
+            <Form.Item label="Итоговый счёт матча">
+              <div className="d-stack spacing-2 align-center">
+                <Input placeholder="Команда 1" />
+                <span> - </span>
+                <Input placeholder="Команда 2" />
+              </div>
+            </Form.Item>
+          </div>
+        </div>
+        <div className="d-stack spacing-2">
           <Form.Item label="Команда 1" className="flex-grow-1">
             <Input placeholder="Команда 1" />
           </Form.Item>
           <Form.Item label="Команда 2" className="flex-grow-1">
             <Input placeholder="Команда 2" />
-          </Form.Item>
-        </div>
-        <div className="d-stack spacing-2">
-          <Form.Item label="Очки 1" className="flex-grow-1">
-            <Input placeholder="Очки 1" />
-          </Form.Item>
-          <Form.Item label="Очки 2" className="flex-grow-1">
-            <Input placeholder="Очки 2" />
           </Form.Item>
         </div>
         <div className="d-stack spacing-2">
@@ -67,19 +75,27 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
       {state != null && (
         <Form layout="vertical">
           <div className="d-stack spacing-2">
+            <Form.Item style={{ flex: 1 }} label="Соревнование">
+              <Select placeholder="Соревнование">
+                <Select.Option>Финал - Запад</Select.Option>
+              </Select>
+            </Form.Item>
+            <div style={{ flexBasis: "50%" }} className="d-stack spacing-2">
+              <Form.Item label="Итоговый счёт матча">
+                <div className="d-stack spacing-2 align-center">
+                  <Input placeholder="Команда 1" />
+                  <span> - </span>
+                  <Input placeholder="Команда 2" />
+                </div>
+              </Form.Item>
+            </div>
+          </div>
+          <div className="d-stack spacing-2">
             <Form.Item label="Команда 1" className="flex-grow-1">
               <Input value={state.team1} placeholder="Команда 1" />
             </Form.Item>
             <Form.Item label="Команда 2" className="flex-grow-1">
               <Input value={state.team2} placeholder="Команда 2" />
-            </Form.Item>
-          </div>
-          <div className="d-stack spacing-2">
-            <Form.Item label="Очки 1" className="flex-grow-1">
-              <Input value={state.result.split(" - ")[0]} placeholder="Очки 1" />
-            </Form.Item>
-            <Form.Item label="Очки 2" className="flex-grow-1">
-              <Input value={state.result.split(" - ")[1]} placeholder="Очки 2" />
             </Form.Item>
           </div>
           <div className="d-stack spacing-2">

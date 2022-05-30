@@ -62,9 +62,9 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
           <Form.Item label="Организатор">
             <Input value={state.manager} placeholder="Организатор" />
           </Form.Item>
-          <Form.Item label="Количество команд">
-            <Input value={state.teams} placeholder="Количество команд" />
-          </Form.Item>
+          {/*<Form.Item label="Количество команд">*/}
+          {/*  <Input value={state.teams} placeholder="Количество команд" />*/}
+          {/*</Form.Item>*/}
         </Form>
       )}
     </Modal>
