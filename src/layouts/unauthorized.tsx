@@ -22,7 +22,7 @@ export function UnauthorizedLayout({ children }: { children: React.ReactNode }) 
         width: "100%",
       }}
     >
-      <Header className="px-3">
+      <Header style={{ borderBottom: "1px solid #1890FF80", boxSizing: "content-box" }} className="px-3">
         <TopMenu isAuthorized={true} />
       </Header>
       <Layout
