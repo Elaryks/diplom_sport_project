@@ -189,7 +189,7 @@ export function TablePage() {
           </Select>
         </Form.Item>
         <Form.Item label="Команда">
-          <Input placeholder="Команда" style={{ width: "250px" }} />
+          <Input placeholder="Название команды" style={{ width: "250px" }} />
         </Form.Item>
         {/*<Button onClick={() => setIsAddDialogVisible(true)} className="ml-auto">*/}
         {/*  Добавить*/}

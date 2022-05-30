@@ -127,6 +127,11 @@ export function PlayerPage() {
       key: "weight",
     },
     {
+      title: "Пол",
+      dataIndex: "gender",
+      key: "gender",
+    },
+    {
       title: "Дата рождения",
       dataIndex: "birthday",
       key: "birthday",
@@ -142,6 +147,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "2",
@@ -151,6 +157,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "3",
@@ -160,6 +167,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "4",
@@ -169,6 +177,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "5",
@@ -178,6 +187,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "6",
@@ -187,6 +197,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "7",
@@ -196,6 +207,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "8",
@@ -205,6 +217,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "9",
@@ -214,6 +227,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "10",
@@ -223,6 +237,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
     {
       key: "11",
@@ -232,6 +247,7 @@ export function PlayerPage() {
       height: "157",
       weight: "75",
       birthday: "12.12.1984",
+      gender: "Мужской",
     },
   ];
 
@@ -255,7 +271,20 @@ export function PlayerPage() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Участник">
-          <Input placeholder="Участник" style={{ width: "250px" }} />
+          <Input placeholder="ФИО участника" style={{ width: "250px" }} />
+        </Form.Item>
+        <Form.Item label="Амплуа">
+          <Select placeholder="Амплуа">
+            <Select.Option key="1" children="Нападающий" />
+            <Select.Option key="2" children="Защитник" />
+            <Select.Option key="3" children="Центровой" />
+          </Select>
+        </Form.Item>
+        <Form.Item label="Пол">
+          <Select placeholder="Пол">
+            <Select.Option key="1" children="Мужской" />
+            <Select.Option key="2" children="Женский" />
+          </Select>
         </Form.Item>
       </Form>
       <Divider />

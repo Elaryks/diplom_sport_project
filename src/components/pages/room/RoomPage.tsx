@@ -173,8 +173,11 @@ export function RoomPage() {
         }
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
-        <Form.Item label="Название места проведения">
-          <Input placeholder="Название" style={{ width: "250px" }} />
+        <Form.Item label="Место проведения">
+          <Input placeholder="Название места проведения" style={{ width: "250px" }} />
+        </Form.Item>
+        <Form.Item label="Адрес">
+          <Input placeholder="Адрес места проведения" style={{ width: "250px" }} />
         </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">

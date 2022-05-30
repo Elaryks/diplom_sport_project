@@ -265,7 +265,7 @@ export function GamePage() {
           <DatePicker placeholder="Дата проведения" />
         </Form.Item>
         <Form.Item label="Команда">
-          <Input placeholder="Команда" style={{ width: "250px" }} />
+          <Input placeholder="Название команды" style={{ width: "250px" }} />
         </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">

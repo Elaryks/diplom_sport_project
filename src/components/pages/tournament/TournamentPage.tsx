@@ -146,6 +146,12 @@ export function TournamentPage() {
         }
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <Form.Item label="Команда">
+          <Input placeholder="Название соревнования" style={{ width: "250px" }} />
+        </Form.Item>
+        <Form.Item label="Организатор">
+          <Input placeholder="Название организатора" style={{ width: "250px" }} />
+        </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">
           <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>

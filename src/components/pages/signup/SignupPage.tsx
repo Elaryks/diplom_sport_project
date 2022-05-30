@@ -76,11 +76,17 @@ export function SignupPage() {
         </div>
 
         <div className="d-stack spacing-2 align-end">
-          <Form.Item style={{ flexBasis: "50%" }} name="height" label="Рост (см)">
+          <Form.Item style={{ flexBasis: "33%" }} name="height" label="Рост (см)">
             <Input placeholder="Рост (см)" />
           </Form.Item>
-          <Form.Item style={{ flexBasis: "50%" }} name="weight" label="Вес (кг)">
+          <Form.Item style={{ flexBasis: "33%" }} name="weight" label="Вес (кг)">
             <Input placeholder="Вес (кг)" />
+          </Form.Item>
+          <Form.Item style={{ flexBasis: "33%" }} name="gender" label="Пол">
+            <Select placeholder="Пол">
+              <Select.Option key="1" children="Мужской" />
+              <Select.Option key="2" children="Женский" />
+            </Select>
           </Form.Item>
         </div>
 

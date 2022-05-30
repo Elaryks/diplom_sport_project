@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Avatar, Button, Divider, Form, Input, List, Modal, Table } from "antd";
+import { Button, Divider, Form, Input, List, Modal, Table } from "antd";
 
 const players = [
   {
@@ -64,6 +64,11 @@ const getRandomRole = () => {
   return roles[Math.floor(Math.random() * roles.length)];
 };
 
+const getRandomGender = () => {
+  const genders = ["Мужской", "Женский"];
+  return genders[Math.floor(Math.random() * genders.length)];
+};
+
 const AddTeamDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
     <Modal
@@ -126,9 +131,14 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
         renderItem={(item) => (
           <List.Item>
             <List.Item.Meta
-              avatar={<Avatar src={item?.picture?.large ?? undefined} />}
+              // avatar={<Avatar src={item?.picture?.large ?? undefined} />}
               title={<a href="">{item.name.last + " " + item.name.last}</a>}
-              description={getRandomRole()}
+              description={
+                <div className="d-stack-column">
+                  <span children={getRandomRole()} />
+                  <span children={"Пол: " + getRandomGender()} />
+                </div>
+              }
             />
           </List.Item>
         )}
@@ -153,6 +163,12 @@ export function TeamPage() {
       dataIndex: "city",
       key: "city",
     },
+    {
+      title: "Количество участников",
+      dataIndex: "players",
+      key: "players",
+      width: "1%",
+    },
   ];
 
   const dataSource = [
@@ -160,46 +176,55 @@ export function TeamPage() {
       key: "1",
       name: "Атланта Хоукс",
       city: "Атланта",
+      players: "21",
     },
     {
       key: "2",
       name: "Бостон Селтикс",
       city: "Бостон",
+      players: "21",
     },
     {
       key: "3",
       name: "Бруклин Нетс",
       city: "Нью-Йорк",
+      players: "21",
     },
     {
       key: "4",
       name: "Вашингтон Уизардс",
       city: "Вашингтон",
+      players: "21",
     },
     {
       key: "5",
       name: "Денвер Наггетс",
       city: "Денвер",
+      players: "21",
     },
     {
       key: "6",
       name: "Милуоки Бакс",
       city: "Милуоки",
+      players: "21",
     },
     {
       key: "7",
       name: "Нью-Йорк Никс",
       city: "Нью-Йорк",
+      players: "21",
     },
     {
       key: "8",
       name: "Орландо Мэджик",
       city: "Орландо",
+      players: "21",
     },
     {
       key: "9",
       name: "Торонто Рэпторс",
       city: "Торонто",
+      players: "21",
     },
   ];
 
@@ -222,6 +247,12 @@ export function TeamPage() {
         }
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <Form.Item label="Команда">
+          <Input placeholder="Название соревнования" style={{ width: "250px" }} />
+        </Form.Item>
+        <Form.Item label="Адрес">
+          <Input placeholder="Адрес" style={{ width: "250px" }} />
+        </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">
           <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
