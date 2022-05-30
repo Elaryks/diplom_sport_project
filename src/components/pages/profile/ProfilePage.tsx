@@ -30,7 +30,7 @@ export function ProfilePage() {
           </Form.Item>
           <Form.Item
             style={{ flexBasis: "50%" }}
-            label="Пароль"
+            label="Новый пароль"
             name="password"
             rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}
           >
