@@ -59,9 +59,9 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
           <Form.Item label="Название">
             <Input value={state.name} placeholder="Название" />
           </Form.Item>
-          <Form.Item label="Организатор">
-            <Input value={state.manager} placeholder="Организатор" />
-          </Form.Item>
+          {/*<Form.Item label="Организатор">*/}
+          {/*  <Input value={state.manager} placeholder="Организатор" />*/}
+          {/*</Form.Item>*/}
           {/*<Form.Item label="Количество команд">*/}
           {/*  <Input value={state.teams} placeholder="Количество команд" />*/}
           {/*</Form.Item>*/}
@@ -150,7 +150,7 @@ export function TournamentPage() {
           <Input placeholder="Название соревнования" style={{ width: "250px" }} />
         </Form.Item>
         <Form.Item label="Организатор">
-          <Input placeholder="Название организатора" style={{ width: "250px" }} />
+          <Input placeholder="ФИО организатора" style={{ width: "250px" }} />
         </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">
