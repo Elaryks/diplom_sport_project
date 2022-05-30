@@ -9,7 +9,7 @@ export function ProfilePage() {
 
   return (
     <div className="d-flex flex-column align-center justify-center" style={{ width: "100%", height: "100%" }}>
-      <Typography.Title level={4} style={{ marginBottom: "24px" }}>
+      <Typography.Title level={3} style={{ marginBottom: "24px" }}>
         Профиль
       </Typography.Title>
       <Form
@@ -34,7 +34,7 @@ export function ProfilePage() {
             name="password"
             rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}
           >
-            <Input prefix={<FiLock className="site-form-item-icon" />} type="password" placeholder="Пароль" />
+            <Input.Password prefix={<FiLock className="site-form-item-icon" />} type="password" placeholder="Пароль" />
           </Form.Item>
         </div>
 
@@ -42,7 +42,7 @@ export function ProfilePage() {
           <Form.Item
             className="flex-grow-1"
             label="Фамилия"
-            name="username"
+            name="lasName"
             rules={[{ required: true, message: "Пожалуйста, введите Фамилию!" }]}
           >
             <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Фамилия" />
@@ -50,18 +50,18 @@ export function ProfilePage() {
           <Form.Item
             style={{ flexBasis: "50%" }}
             label="Имя"
-            name="username"
+            name="firstName"
             rules={[{ required: true, message: "Пожалуйста, введите имя!" }]}
           >
             <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Имя" />
           </Form.Item>
-          <Form.Item style={{ flexBasis: "50%" }} label="Отчество" name="username">
+          <Form.Item style={{ flexBasis: "50%" }} label="Отчество" name="middleName">
             <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Отчество" />
           </Form.Item>
         </div>
 
         <div className="d-stack spacing-2 align-end">
-          <Form.Item style={{ flexBasis: "50%" }} label="Амплуа">
+          <Form.Item style={{ flexBasis: "50%" }} name="role" label="Амплуа">
             <Select placeholder="Амплуа">
               <Select.Option key="1" children="Нападающий" />
               <Select.Option key="2" children="Защитник" />
@@ -74,10 +74,10 @@ export function ProfilePage() {
         </div>
 
         <div className="d-stack spacing-2 align-end">
-          <Form.Item style={{ flexBasis: "50%" }} label="Рост (см)">
+          <Form.Item style={{ flexBasis: "50%" }} name="height" label="Рост (см)">
             <Input placeholder="Рост (см)" />
           </Form.Item>
-          <Form.Item style={{ flexBasis: "50%" }} label="Вес (кг)">
+          <Form.Item style={{ flexBasis: "50%" }} name="weight" label="Вес (кг)">
             <Input placeholder="Вес (кг)" />
           </Form.Item>
         </div>

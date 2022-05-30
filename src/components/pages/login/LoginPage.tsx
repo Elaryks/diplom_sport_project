@@ -14,7 +14,7 @@ export function LoginPage() {
 
   return (
     <div className="d-flex flex-column align-center justify-center" style={{ width: "100%", height: "100%" }}>
-      <Typography.Title level={4} style={{ marginBottom: "24px" }}>
+      <Typography.Title level={3} style={{ marginBottom: "24px" }}>
         Вход
       </Typography.Title>
       <Form layout="vertical" style={{ width: "280px" }} name="loginForm" className="login-form" onFinish={handleLogin}>
@@ -22,7 +22,7 @@ export function LoginPage() {
           <Input prefix={<FiAtSign className="site-form-item-icon" />} placeholder="E-mail" />
         </Form.Item>
         <Form.Item label="Пароль" name="password" rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}>
-          <Input prefix={<FiLock className="site-form-item-icon" />} type="password" placeholder="Пароль" />
+          <Input.Password prefix={<FiLock className="site-form-item-icon" />} type="password" placeholder="Пароль" />
         </Form.Item>
 
         <Form.Item>

@@ -14,7 +14,7 @@ export function RestorePasswordPage() {
 
   return (
     <div className="d-flex flex-column align-center justify-center" style={{ width: "100%", height: "100%" }}>
-      <Typography.Title level={4} style={{ marginBottom: "24px" }}>
+      <Typography.Title level={3} style={{ marginBottom: "24px" }}>
         Восстановление пароля
       </Typography.Title>
       <Form
