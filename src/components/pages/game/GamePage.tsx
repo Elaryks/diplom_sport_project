@@ -20,7 +20,7 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
             </Select>
           </Form.Item>
           <div style={{ flexBasis: "50%" }} className="d-stack spacing-2">
-            <Form.Item label="Итоговый счёт матча">
+            <Form.Item label="Итоговый счет матча">
               <div className="d-stack spacing-2 align-center">
                 <Input placeholder="Команда 1" />
                 <span> - </span>
@@ -81,7 +81,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
               </Select>
             </Form.Item>
             <div style={{ flexBasis: "50%" }} className="d-stack spacing-2">
-              <Form.Item label="Итоговый счёт матча">
+              <Form.Item label="Итоговый счет матча">
                 <div className="d-stack spacing-2 align-center">
                   <Input placeholder="Команда 1" />
                   <span> - </span>
