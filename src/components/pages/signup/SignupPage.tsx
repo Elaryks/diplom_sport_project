@@ -14,6 +14,7 @@ export function SignupPage() {
         Регистрация
       </Typography.Title>
       <Form
+        requiredMark={false}
         layout="vertical"
         style={{ width: "560px" }}
         name="loginForm"
@@ -56,8 +57,8 @@ export function SignupPage() {
           >
             <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Имя" />
           </Form.Item>
-          <Form.Item style={{ flexBasis: "50%" }} label="Отчество" name="middleName">
-            <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Отчество" />
+          <Form.Item style={{ flexBasis: "50%" }} label="Отчество (Если есть)" name="middleName">
+            <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Отчество (Если есть)" />
           </Form.Item>
         </div>
 
