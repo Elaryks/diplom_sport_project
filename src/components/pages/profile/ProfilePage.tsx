@@ -34,7 +34,11 @@ export function ProfilePage() {
             name="password"
             rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}
           >
-            <Input.Password prefix={<FiLock className="site-form-item-icon" />} type="password" placeholder="Пароль" />
+            <Input.Password
+              prefix={<FiLock className="site-form-item-icon" />}
+              type="password"
+              placeholder="Новый пароль"
+            />
           </Form.Item>
         </div>
 
