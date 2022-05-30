@@ -33,7 +33,7 @@ const AddPlayerDialog = (open: boolean, handleOk: () => void, handleCancel: () =
           <Input placeholder="Вес (кг)" />
         </Form.Item>
         <Form.Item label="Дата рождения">
-          <DatePicker placeholder="Дата рождения" />
+          <DatePicker style={{ width: "100%" }} placeholder="Дата рождения" />
         </Form.Item>
       </Form>
     </Modal>
@@ -85,7 +85,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
             <Input value={state.weight} placeholder="Вес (кг)" />
           </Form.Item>
           <Form.Item label="Дата рождения">
-            <Input value={state.birthday} placeholder="Дата рождения" />
+            <DatePicker style={{ width: "100%" }} placeholder="Дата рождения" />
             {/*<DatePicker style={{ width: "100%" }} placeholder="Дата рождения" />*/}
           </Form.Item>
         </Form>

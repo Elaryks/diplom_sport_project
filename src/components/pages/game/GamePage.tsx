@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Divider, Form, Input, Modal, Select, Table } from "antd";
+import { Button, DatePicker, Divider, Form, Input, Modal, Select, Table, TimePicker } from "antd";
 
 const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -39,10 +39,10 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
         </div>
         <div className="d-stack spacing-2">
           <Form.Item label="Дата проведения" className="flex-grow-1">
-            <Input placeholder="Дата проведения" />
+            <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
           </Form.Item>
           <Form.Item label="Время проведения" className="flex-grow-1">
-            <Input placeholder="Время проведения" />
+            <TimePicker style={{ width: "100%" }} placeholder="Время проведения" />
           </Form.Item>
         </div>
       </Form>
@@ -100,10 +100,10 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
           </div>
           <div className="d-stack spacing-2">
             <Form.Item label="Дата проведения" className="flex-grow-1">
-              <Input value={state.date.split(" в ")[0]} placeholder="Дата проведения" />
+              <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
             </Form.Item>
             <Form.Item label="Время проведения" className="flex-grow-1">
-              <Input value={state.date.split(" в ")[1]} placeholder="Время проведения" />
+              <TimePicker style={{ width: "100%" }} placeholder="Время проведения" />
             </Form.Item>
           </div>
         </Form>
@@ -278,7 +278,7 @@ export function GamePage() {
           </Select>
         </Form.Item>
         <Form.Item label="Дата проведения">
-          <DatePicker placeholder="Дата проведения" />
+          <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
         </Form.Item>
         <Form.Item label="Команда">
           <Input placeholder="Название команды" style={{ width: "250px" }} />
