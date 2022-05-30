@@ -14,7 +14,7 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
     >
       <Form layout="vertical">
         <div className="d-stack spacing-2">
-          <Form.Item style={{ flex: 1 }} label="Соревнование">
+          <Form.Item style={{ flexBasis: "50%" }} label="Соревнование">
             <Select placeholder="Соревнование">
               <Select.Option>Финал - Запад</Select.Option>
             </Select>
@@ -30,18 +30,18 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
           </div>
         </div>
         <div className="d-stack spacing-2">
-          <Form.Item label="Команда 1" className="flex-grow-1">
+          <Form.Item label="Команда 1" style={{ flexBasis: "50%" }}>
             <Input placeholder="Команда 1" />
           </Form.Item>
-          <Form.Item label="Команда 2" className="flex-grow-1">
+          <Form.Item label="Команда 2" style={{ flexBasis: "50%" }}>
             <Input placeholder="Команда 2" />
           </Form.Item>
         </div>
         <div className="d-stack spacing-2">
-          <Form.Item label="Дата проведения" className="flex-grow-1">
+          <Form.Item label="Дата проведения" style={{ flexBasis: "50%" }}>
             <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
           </Form.Item>
-          <Form.Item label="Время проведения" className="flex-grow-1">
+          <Form.Item label="Время проведения" style={{ flexBasis: "50%" }}>
             <TimePicker format="HH:mm" style={{ width: "100%" }} placeholder="Время проведения" />
           </Form.Item>
         </div>
@@ -75,7 +75,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
       {state != null && (
         <Form layout="vertical">
           <div className="d-stack spacing-2">
-            <Form.Item style={{ flex: 1 }} label="Соревнование">
+            <Form.Item style={{ flexBasis: "50%" }} label="Соревнование">
               <Select placeholder="Соревнование">
                 <Select.Option>Финал - Запад</Select.Option>
               </Select>
@@ -91,18 +91,18 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
             </div>
           </div>
           <div className="d-stack spacing-2">
-            <Form.Item label="Команда 1" className="flex-grow-1">
+            <Form.Item label="Команда 1" style={{ flexBasis: "50%" }}>
               <Input value={state.team1} placeholder="Команда 1" />
             </Form.Item>
-            <Form.Item label="Команда 2" className="flex-grow-1">
+            <Form.Item label="Команда 2" style={{ flexBasis: "50%" }}>
               <Input value={state.team2} placeholder="Команда 2" />
             </Form.Item>
           </div>
           <div className="d-stack spacing-2">
-            <Form.Item label="Дата проведения" className="flex-grow-1">
+            <Form.Item label="Дата проведения" style={{ flexBasis: "50%" }}>
               <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
             </Form.Item>
-            <Form.Item label="Время проведения" className="flex-grow-1">
+            <Form.Item label="Время проведения" style={{ flexBasis: "50%" }}>
               <TimePicker format="HH:mm" style={{ width: "100%" }} placeholder="Время проведения" />
             </Form.Item>
           </div>
