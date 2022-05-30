@@ -111,6 +111,12 @@ export function TablePage() {
       key: "gl",
       // width: "1%",
     },
+    {
+      title: "О",
+      dataIndex: "p",
+      key: "p",
+      // width: "1%",
+    },
     // {
     //   title: "%",
     //   dataIndex: "p",
@@ -127,6 +133,7 @@ export function TablePage() {
       ga: "82",
       gw: "53",
       gl: "29",
+      p: "142",
     },
     {
       key: "2",
@@ -135,6 +142,7 @@ export function TablePage() {
       ga: "82",
       gw: "51",
       gl: "31",
+      p: "140",
     },
     {
       key: "3",
@@ -143,6 +151,7 @@ export function TablePage() {
       ga: "82",
       gw: "51",
       gl: "31",
+      p: "139",
     },
     {
       key: "4",
@@ -151,6 +160,7 @@ export function TablePage() {
       ga: "82",
       gw: "48",
       gl: "34",
+      p: "128",
     },
     {
       key: "5",
@@ -159,6 +169,7 @@ export function TablePage() {
       ga: "82",
       gw: "46",
       gl: "36",
+      p: "96",
     },
   ];
 
