@@ -5,18 +5,18 @@
 }
 
 * {
-  scrollbar-color: #001529 #fff;
+  scrollbar-color: #1890FF #fff;
   scrollbar-width: thin;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
   height: 4px;
   background-color: inherit;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #001529;
+  background-color: #1890FF;
   //border-left: 6px solid rgba(0, 0, 0, 0);
   //background-clip: padding-box;
 }
