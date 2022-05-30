@@ -42,7 +42,7 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
             <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
           </Form.Item>
           <Form.Item label="Время проведения" className="flex-grow-1">
-            <TimePicker style={{ width: "100%" }} placeholder="Время проведения" />
+            <TimePicker format="HH:mm" style={{ width: "100%" }} placeholder="Время проведения" />
           </Form.Item>
         </div>
       </Form>
@@ -103,7 +103,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
               <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
             </Form.Item>
             <Form.Item label="Время проведения" className="flex-grow-1">
-              <TimePicker style={{ width: "100%" }} placeholder="Время проведения" />
+              <TimePicker format="HH:mm" style={{ width: "100%" }} placeholder="Время проведения" />
             </Form.Item>
           </div>
         </Form>
