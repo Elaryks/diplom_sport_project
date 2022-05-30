@@ -1,5 +1,68 @@
 import React, { useState } from "react";
-import { Button, Divider, Form, Input, Modal, Table } from "antd";
+import { Avatar, Button, Divider, Form, Input, List, Modal, Table } from "antd";
+
+const players = [
+  {
+    gender: "male",
+    name: { title: "Mr", first: "Craig", last: "Barnett" },
+    email: "craig.barnett@example.com",
+    picture: {
+      large: "https://randomuser.me/api/portraits/men/36.jpg",
+      medium: "https://randomuser.me/api/portraits/med/men/36.jpg",
+      thumbnail: "https://randomuser.me/api/portraits/thumb/men/36.jpg",
+    },
+    nat: "GB",
+  },
+  {
+    gender: "female",
+    name: { title: "Madame", first: "Jeannine", last: "Marie" },
+    email: "jeannine.marie@example.com",
+    picture: {
+      large: "https://randomuser.me/api/portraits/women/67.jpg",
+      medium: "https://randomuser.me/api/portraits/med/women/67.jpg",
+      thumbnail: "https://randomuser.me/api/portraits/thumb/women/67.jpg",
+    },
+    nat: "CH",
+  },
+  {
+    gender: "female",
+    name: { title: "Miss", first: "Mary", last: "Bennett" },
+    email: "mary.bennett@example.com",
+    picture: {
+      large: "https://randomuser.me/api/portraits/women/24.jpg",
+      medium: "https://randomuser.me/api/portraits/med/women/24.jpg",
+      thumbnail: "https://randomuser.me/api/portraits/thumb/women/24.jpg",
+    },
+    nat: "GB",
+  },
+  {
+    gender: "female",
+    name: { title: "Miss", first: "Madison", last: "Wright" },
+    email: "madison.wright@example.com",
+    picture: {
+      large: "https://randomuser.me/api/portraits/women/56.jpg",
+      medium: "https://randomuser.me/api/portraits/med/women/56.jpg",
+      thumbnail: "https://randomuser.me/api/portraits/thumb/women/56.jpg",
+    },
+    nat: "NZ",
+  },
+  {
+    gender: "male",
+    name: { title: "Mr", first: "Dean", last: "Mahieu" },
+    email: "dean.mahieu@example.com",
+    picture: {
+      large: "https://randomuser.me/api/portraits/men/4.jpg",
+      medium: "https://randomuser.me/api/portraits/med/men/4.jpg",
+      thumbnail: "https://randomuser.me/api/portraits/thumb/men/4.jpg",
+    },
+    nat: "NL",
+  },
+];
+
+const getRandomRole = () => {
+  const roles = ["Нападающий", "Защитник", "Центровой"];
+  return roles[Math.floor(Math.random() * roles.length)];
+};
 
 const AddTeamDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -56,6 +119,20 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
           </Form.Item>
         </Form>
       )}
+      <List
+        itemLayout="horizontal"
+        dataSource={players}
+        header={<span>Участники</span>}
+        renderItem={(item) => (
+          <List.Item>
+            <List.Item.Meta
+              avatar={<Avatar src={item?.picture?.large ?? undefined} />}
+              title={<a href="">{item.name.last + " " + item.name.last}</a>}
+              description={getRandomRole()}
+            />
+          </List.Item>
+        )}
+      />
     </Modal>
   );
 };
@@ -144,11 +221,14 @@ export function TeamPage() {
           setRowDialogState(null);
         }
       )}
-      <div className="d-stack spacing-2">
-        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
-          Добавить
-        </Button>
-      </div>
+      <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <div className="flex-grow-1" />
+        <Form.Item label=" ">
+          <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
+            Добавить
+          </Button>
+        </Form.Item>
+      </Form>
       <Divider />
       <Table
         dataSource={dataSource}

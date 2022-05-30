@@ -180,17 +180,21 @@ export function TablePage() {
           setRowDialogState(null);
         }
       )}
-      <div className="d-stack spacing-2">
-        <Select value="1" placeholder="" style={{ width: "150px" }}>
-          <Select.Option key="1">Все</Select.Option>
-          <Select.Option key="2">В гостях</Select.Option>
-          <Select.Option key="3">Дома</Select.Option>
-        </Select>
-        <Input placeholder="Команда" style={{ width: "250px" }} />
+      <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <Form.Item label="Соревнования">
+          <Select value="1" placeholder="" style={{ width: "150px" }}>
+            <Select.Option key="1">Все</Select.Option>
+            <Select.Option key="2">В гостях</Select.Option>
+            <Select.Option key="3">Дома</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label="Команда">
+          <Input placeholder="Команда" style={{ width: "250px" }} />
+        </Form.Item>
         {/*<Button onClick={() => setIsAddDialogVisible(true)} className="ml-auto">*/}
         {/*  Добавить*/}
         {/*</Button>*/}
-      </div>
+      </Form>
       <Divider />
       <Table
         dataSource={dataSource}

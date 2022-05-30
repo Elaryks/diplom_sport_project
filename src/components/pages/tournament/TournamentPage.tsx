@@ -145,11 +145,14 @@ export function TournamentPage() {
           setRowDialogState(null);
         }
       )}
-      <div className="d-stack spacing-2">
-        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
-          Добавить
-        </Button>
-      </div>
+      <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <div className="flex-grow-1" />
+        <Form.Item label=" ">
+          <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
+            Добавить
+          </Button>
+        </Form.Item>
+      </Form>
       <Divider />
       <Table
         dataSource={dataSource}

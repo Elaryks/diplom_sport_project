@@ -253,18 +253,27 @@ export function GamePage() {
           setRowDialogState(null);
         }
       )}
-      <div className="d-stack spacing-2">
-        <Select value="1" placeholder="" style={{ width: "150px" }}>
-          <Select.Option key="1">Все</Select.Option>
-          <Select.Option key="2">В гостях</Select.Option>
-          <Select.Option key="3">Дома</Select.Option>
-        </Select>
-        <DatePicker placeholder="Дата проведения" />
-        <Input placeholder="Команда" style={{ width: "250px" }} />
-        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
-          Добавить
-        </Button>
-      </div>
+      <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <Form.Item label="Соревнования">
+          <Select value="1" placeholder="" style={{ width: "150px" }}>
+            <Select.Option key="1">Все</Select.Option>
+            <Select.Option key="2">В гостях</Select.Option>
+            <Select.Option key="3">Дома</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label="Дата проведения">
+          <DatePicker placeholder="Дата проведения" />
+        </Form.Item>
+        <Form.Item label="Команда">
+          <Input placeholder="Команда" style={{ width: "250px" }} />
+        </Form.Item>
+        <div className="flex-grow-1" />
+        <Form.Item label=" ">
+          <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
+            Добавить
+          </Button>
+        </Form.Item>
+      </Form>
       <Divider />
       <Table
         dataSource={dataSource}

@@ -172,12 +172,17 @@ export function RoomPage() {
           setRowDialogState(null);
         }
       )}
-      <div className="d-stack spacing-2">
-        <Input placeholder="Название" style={{ width: "250px" }} />
-        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
-          Добавить
-        </Button>
-      </div>
+      <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
+        <Form.Item label="Название места проведения">
+          <Input placeholder="Название" style={{ width: "250px" }} />
+        </Form.Item>
+        <div className="flex-grow-1" />
+        <Form.Item label=" ">
+          <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
+            Добавить
+          </Button>
+        </Form.Item>
+      </Form>
       <Divider />
       <Table
         dataSource={dataSource}
