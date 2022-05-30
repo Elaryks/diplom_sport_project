@@ -174,7 +174,7 @@ export function RoomPage() {
       )}
       <div className="d-stack spacing-2">
         <Input placeholder="Название" style={{ width: "250px" }} />
-        <Button onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
+        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
           Добавить
         </Button>
       </div>

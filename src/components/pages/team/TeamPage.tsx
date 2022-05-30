@@ -145,7 +145,7 @@ export function TeamPage() {
         }
       )}
       <div className="d-stack spacing-2">
-        <Button onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
+        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
           Добавить
         </Button>
       </div>

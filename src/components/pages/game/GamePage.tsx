@@ -102,11 +102,11 @@ export function GamePage() {
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
   const columns = [
-    // {
-    //   title: "Матч",
-    //   dataIndex: "name",
-    //   key: "name",
-    // },
+    {
+      title: "Соревнование",
+      dataIndex: "competition",
+      key: "competition",
+    },
     {
       title: "Команда 1",
       dataIndex: "team1",
@@ -134,6 +134,7 @@ export function GamePage() {
   const [dataSource, setDataSource] = useState([
     {
       key: "1",
+      competition: "Финал - Запад",
       name: "",
       team1: "Хит",
       team2: "Септикс",
@@ -142,6 +143,7 @@ export function GamePage() {
     },
     {
       key: "2",
+      competition: "Финал - Запад",
       name: "",
       team1: "Септикс",
       team2: "Хит",
@@ -150,6 +152,7 @@ export function GamePage() {
     },
     {
       key: "3",
+      competition: "Финал - Запад",
       name: "",
       team1: "Уорриорз",
       team2: "Маверикс",
@@ -158,6 +161,7 @@ export function GamePage() {
     },
     {
       key: "4",
+      competition: "Финал - Запад",
       name: "",
       team1: "Хит",
       team2: "Септикс",
@@ -166,6 +170,7 @@ export function GamePage() {
     },
     {
       key: "5",
+      competition: "Финал - Запад",
       name: "",
       team1: "Маверикс",
       team2: "Уорриорз",
@@ -174,6 +179,7 @@ export function GamePage() {
     },
     {
       key: "6",
+      competition: "Финал - Запад",
       name: "",
       team1: "Септикс",
       team2: "Хит",
@@ -182,6 +188,7 @@ export function GamePage() {
     },
     {
       key: "7",
+      competition: "Финал - Запад",
       name: "",
       team1: "Маверикс",
       team2: "Уорриорз",
@@ -190,6 +197,7 @@ export function GamePage() {
     },
     {
       key: "8",
+      competition: "Финал - Запад",
       name: "",
       team1: "Септикс",
       team2: "Хит",
@@ -198,6 +206,7 @@ export function GamePage() {
     },
     {
       key: "9",
+      competition: "Финал - Запад",
       name: "",
       team1: "Уорриорз",
       team2: "Маверикс",
@@ -206,6 +215,7 @@ export function GamePage() {
     },
     {
       key: "10",
+      competition: "Финал - Запад",
       name: "",
       team1: "Септикс",
       team2: "Хит",
@@ -214,6 +224,7 @@ export function GamePage() {
     },
     {
       key: "11",
+      competition: "Финал - Запад",
       name: "",
       team1: "Уорриорз",
       team2: "Маверикс",
@@ -250,7 +261,7 @@ export function GamePage() {
         </Select>
         <DatePicker placeholder="Дата проведения" />
         <Input placeholder="Команда" style={{ width: "250px" }} />
-        <Button onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
+        <Button type="primary" onClick={() => setIsAddDialogVisible(true)} className="ml-auto">
           Добавить
         </Button>
       </div>

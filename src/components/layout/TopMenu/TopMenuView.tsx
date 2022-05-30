@@ -24,18 +24,14 @@ const LinkItem = (link: string, text: string, icon?: React.ReactElement) => {
 
 export function TopMenuView(props: ITopMenuView) {
   return (
-    <Menu theme="dark" mode="horizontal">
+    <Menu className="ml-auto mr-auto" style={{ maxWidth: "1600px" }} theme="dark" mode="horizontal">
       {topMenuLinks.map((item) => (
         <Menu.Item className={window.location.pathname == item.link ? "ant-menu-item-selected" : ""} key={item.key}>
           {LinkItem(item.link, item.text, item.icon)}
         </Menu.Item>
       ))}
       <Menu.Item className={window.location.pathname == "/profile" ? "ant-menu-item-selected ml-auto" : "ml-auto"}>
-        {LinkItem(
-          props.isAuthorized ? "/profile" : "/login",
-          props.isAuthorized ? "Личный кабинет" : "Вход",
-          <FiUser />
-        )}
+        {LinkItem(props.isAuthorized ? "/profile" : "/login", props.isAuthorized ? "Профиль" : "Вход", <FiUser />)}
       </Menu.Item>
     </Menu>
   );
