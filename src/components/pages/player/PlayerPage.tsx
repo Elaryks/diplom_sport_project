@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Form, Input, Modal, Select, Table } from "antd";
+import { Button, DatePicker, Divider, Form, Input, Modal, Select, Table } from "antd";
 
 const AddPlayerDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -259,6 +259,7 @@ export function PlayerPage() {
         {/*  Добавить*/}
         {/*</Button>*/}
       </div>
+      <Divider />
       <Table
         dataSource={dataSource}
         columns={columns}

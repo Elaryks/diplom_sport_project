@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Modal, Table } from "antd";
+import { Button, Divider, Form, Input, Modal, Table } from "antd";
 
 const AddTournamentDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -150,6 +150,7 @@ export function TournamentPage() {
           Добавить
         </Button>
       </div>
+      <Divider />
       <Table
         dataSource={dataSource}
         columns={columns}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Modal, Table } from "antd";
+import { Button, Divider, Form, Input, Modal, Table } from "antd";
 
 const AddRoomDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -178,6 +178,7 @@ export function RoomPage() {
           Добавить
         </Button>
       </div>
+      <Divider />
       <Table
         dataSource={dataSource}
         columns={columns}
