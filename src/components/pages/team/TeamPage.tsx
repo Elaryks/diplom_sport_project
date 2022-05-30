@@ -248,7 +248,7 @@ export function TeamPage() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Команда">
-          <Input placeholder="Название соревнования" style={{ width: "250px" }} />
+          <Input placeholder="Название команды" style={{ width: "250px" }} />
         </Form.Item>
         <Form.Item label="Адрес">
           <Input placeholder="Адрес" style={{ width: "250px" }} />
