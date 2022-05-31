@@ -154,7 +154,7 @@ export function TeamPage() {
 
   const columns = [
     {
-      title: "Команда",
+      title: "Название",
       dataIndex: "name",
       key: "name",
     },

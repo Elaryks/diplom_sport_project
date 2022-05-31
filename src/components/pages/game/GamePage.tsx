@@ -31,10 +31,16 @@ const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => 
         </div>
         <div className="d-stack spacing-2">
           <Form.Item label="Команда 1" style={{ flexBasis: "50%" }}>
-            <Input placeholder="Команда 1" />
+            {/*<Input placeholder="Команда 1" />*/}
+            <Select placeholder="Команда 1">
+              <Select.Option>Хит</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item label="Команда 2" style={{ flexBasis: "50%" }}>
-            <Input placeholder="Команда 2" />
+            {/*<Input placeholder="Команда 2" />*/}
+            <Select placeholder="Команда 2">
+              <Select.Option>Уорриорз</Select.Option>
+            </Select>
           </Form.Item>
         </div>
         <div className="d-stack spacing-2">
@@ -92,10 +98,16 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
           </div>
           <div className="d-stack spacing-2">
             <Form.Item label="Команда 1" style={{ flexBasis: "50%" }}>
-              <Input value={state.team1} placeholder="Команда 1" />
+              {/*<Input value={state.team1} placeholder="Команда 1" />*/}
+              <Select placeholder="Команда 1">
+                <Select.Option>Уорриорз</Select.Option>
+              </Select>
             </Form.Item>
             <Form.Item label="Команда 2" style={{ flexBasis: "50%" }}>
-              <Input value={state.team2} placeholder="Команда 2" />
+              {/*<Input value={state.team2} placeholder="Команда 2" />*/}
+              <Select placeholder="Команда 2">
+                <Select.Option>Маверикс</Select.Option>
+              </Select>
             </Form.Item>
           </div>
           <div className="d-stack spacing-2">
