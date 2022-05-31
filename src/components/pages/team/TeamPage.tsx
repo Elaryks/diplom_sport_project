@@ -104,6 +104,13 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
       onCancel={handleCancel}
       footer={
         <>
+          <Button
+            style={{ float: "left", background: "green", borderColor: "green" }}
+            onClick={() => handleOk()}
+            type="primary"
+          >
+            Вступить
+          </Button>
           {/*<Button danger style={{ float: "left" }}>*/}
           {/*  Удалить*/}
           {/*</Button>*/}
