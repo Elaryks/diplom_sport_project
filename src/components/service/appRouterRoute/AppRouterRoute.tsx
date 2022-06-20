@@ -1,5 +1,5 @@
 import React from "react";
-import { UnauthorizedLayout } from "../../../layouts/unauthorized";
+import { DefaultLayout } from "../../../layouts/default";
 
 interface IAppRouterRoute {
   content: React.ReactElement;
@@ -11,5 +11,5 @@ interface IAppRouterRoute {
 }
 
 export function AppRouterRoute(props: IAppRouterRoute) {
-  return <UnauthorizedLayout>{props.content}</UnauthorizedLayout>;
+  return <DefaultLayout>{props.content}</DefaultLayout>;
 }

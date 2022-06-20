@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Input, List, Modal, Table } from "antd";
+import { TeamAddDialog } from "../../dialogs/TeamAddDialog";
+import { teamTableColumns } from "../../../constants/tableColumns/teamTable";
+import { api } from "../../../services";
+import { showMessage } from "../../../helpers/notifierHelpers";
 
 const players = [
   {
@@ -69,29 +73,6 @@ const getRandomGender = () => {
   return genders[Math.floor(Math.random() * genders.length)];
 };
 
-const AddTeamDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Добавить команду"
-      cancelText="Отмена"
-      okText="Добавить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form layout="vertical">
-        <Form.Item label="Название">
-          <Input placeholder="Название" />
-        </Form.Item>
-        <Form.Item label="Адрес">
-          <Input placeholder="Адрес" />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-};
-
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
     <Modal
@@ -159,91 +140,38 @@ export function TeamPage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
-  const columns = [
-    {
-      title: "Название",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Адрес",
-      dataIndex: "city",
-      key: "city",
-    },
-    {
-      title: "Количество участников",
-      dataIndex: "players",
-      key: "players",
-      width: "1%",
-    },
-  ];
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const dataSource = [
-    {
-      key: "1",
-      name: "Атланта Хоукс",
-      city: "Атланта",
-      players: "21",
-    },
-    {
-      key: "2",
-      name: "Бостон Селтикс",
-      city: "Бостон",
-      players: "21",
-    },
-    {
-      key: "3",
-      name: "Бруклин Нетс",
-      city: "Нью-Йорк",
-      players: "21",
-    },
-    {
-      key: "4",
-      name: "Вашингтон Уизардс",
-      city: "Вашингтон",
-      players: "21",
-    },
-    {
-      key: "5",
-      name: "Денвер Наггетс",
-      city: "Денвер",
-      players: "21",
-    },
-    {
-      key: "6",
-      name: "Милуоки Бакс",
-      city: "Милуоки",
-      players: "21",
-    },
-    {
-      key: "7",
-      name: "Нью-Йорк Никс",
-      city: "Нью-Йорк",
-      players: "21",
-    },
-    {
-      key: "8",
-      name: "Орландо Мэджик",
-      city: "Орландо",
-      players: "21",
-    },
-    {
-      key: "9",
-      name: "Торонто Рэпторс",
-      city: "Торонто",
-      players: "21",
-    },
-  ];
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.team.getAll();
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setData(
+      r.map((item, i) => ({
+        key: i,
+        name: item.name,
+        city: item.address,
+        players: (item.participants ?? [])?.length,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-stack-column spacing-2">
-      {AddTeamDialog(
-        isAddDialogVisible,
-        () => {},
-        () => {
-          setIsAddDialogVisible(false);
-        }
-      )}
+      <TeamAddDialog
+        isOpen={isAddDialogVisible}
+        onSuccess={() => setIsAddDialogVisible(false)}
+        onClose={() => setIsAddDialogVisible(false)}
+      />
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
@@ -269,8 +197,9 @@ export function TeamPage() {
       </Form>
       <Divider />
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={data}
+        loading={isLoading}
+        columns={teamTableColumns}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {

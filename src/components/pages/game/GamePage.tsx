@@ -1,60 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, DatePicker, Divider, Form, Input, Modal, Select, Table, TimePicker } from "antd";
-
-const AddGameDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Добавить матч"
-      cancelText="Отмена"
-      okText="Добавить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form layout="vertical">
-        <div className="d-stack spacing-2">
-          <Form.Item style={{ flexBasis: "50%" }} label="Соревнование">
-            <Select placeholder="Соревнование">
-              <Select.Option>Финал - Запад</Select.Option>
-            </Select>
-          </Form.Item>
-          <div style={{ flexBasis: "50%" }} className="d-stack spacing-2">
-            <Form.Item label="Итоговый счет матча">
-              <div className="d-stack spacing-2 align-center">
-                <Input placeholder="Команда 1" />
-                <span> - </span>
-                <Input placeholder="Команда 2" />
-              </div>
-            </Form.Item>
-          </div>
-        </div>
-        <div className="d-stack spacing-2">
-          <Form.Item label="Команда 1" style={{ flexBasis: "50%" }}>
-            {/*<Input placeholder="Команда 1" />*/}
-            <Select placeholder="Команда 1">
-              <Select.Option>Хит</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="Команда 2" style={{ flexBasis: "50%" }}>
-            {/*<Input placeholder="Команда 2" />*/}
-            <Select placeholder="Команда 2">
-              <Select.Option>Уорриорз</Select.Option>
-            </Select>
-          </Form.Item>
-        </div>
-        <div className="d-stack spacing-2">
-          <Form.Item label="Дата проведения" style={{ flexBasis: "50%" }}>
-            <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
-          </Form.Item>
-          <Form.Item label="Время проведения" style={{ flexBasis: "50%" }}>
-            <TimePicker format="HH:mm" style={{ width: "100%" }} placeholder="Время проведения" />
-          </Form.Item>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
+import { gameTableColumns } from "../../../constants/tableColumns/gameTable";
+import { GameAddDialog } from "../../dialogs/GameAddDialog";
+import { api } from "../../../services";
+import { showMessage } from "../../../helpers/notifierHelpers";
+import moment from "moment";
 
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -129,149 +79,41 @@ export function GamePage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
-  const columns = [
-    {
-      title: "Соревнование",
-      dataIndex: "competition",
-      key: "competition",
-    },
-    {
-      title: "Команда 1",
-      dataIndex: "team1",
-      key: "team1",
-    },
-    {
-      title: "Команда 2",
-      dataIndex: "team2",
-      key: "team2",
-    },
-    {
-      title: "Очки",
-      dataIndex: "result",
-      key: "result",
-      // width: "1%",
-    },
-    {
-      title: "Дата и время проведения",
-      dataIndex: "date",
-      key: "date",
-      width: "15%",
-    },
-  ];
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const [dataSource, setDataSource] = useState([
-    {
-      key: "1",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Хит",
-      team2: "Септикс",
-      result: "96 - 100",
-      date: "27.05 в 19:35",
-    },
-    {
-      key: "2",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Септикс",
-      team2: "Хит",
-      result: "103 - 111",
-      date: "27.05 в 17:25",
-    },
-    {
-      key: "3",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Уорриорз",
-      team2: "Маверикс",
-      result: "120 - 110",
-      date: "27.05 в 11:00",
-    },
-    {
-      key: "4",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Хит",
-      team2: "Септикс",
-      result: "80 - 93",
-      date: "27.05 в 09:30",
-    },
-    {
-      key: "5",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Маверикс",
-      team2: "Уорриорз",
-      result: "119 - 109",
-      date: "27.05 в 07:35",
-    },
-    {
-      key: "6",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Септикс",
-      team2: "Хит",
-      result: "102 - 82",
-      date: "27.05 в 06:05",
-    },
-    {
-      key: "7",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Маверикс",
-      team2: "Уорриорз",
-      result: "100 - 109",
-      date: "26.05 в 13:05",
-    },
-    {
-      key: "8",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Септикс",
-      team2: "Хит",
-      result: "103 - 109",
-      date: "27.05 в 13:05",
-    },
-    {
-      key: "9",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Уорриорз",
-      team2: "Маверикс",
-      result: "126 - 117",
-      date: "26.05 в 13:05",
-    },
-    {
-      key: "10",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Септикс",
-      team2: "Хит",
-      result: "102 - 127",
-      date: "26.05 в 13:05",
-    },
-    {
-      key: "11",
-      competition: "Финал - Запад",
-      name: "",
-      team1: "Уорриорз",
-      team2: "Маверикс",
-      result: "112 - 87",
-      date: "25.05 в 13:05",
-    },
-  ]);
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.game.getAll();
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setData(
+      r.map((item, i) => ({
+        key: i,
+        competition: item.dateEvent,
+        name: "",
+        team1: item.team1?.team?.name,
+        team2: item.team2?.team?.name,
+        result: item.countPointsTeam1 ?? 0 + " - " + item.countPointsTeam2 ?? 0,
+        date: moment(item.dateEvent)?.toDate().toLocaleDateString(),
+      }))
+    );
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-stack-column spacing-2">
-      {AddGameDialog(
-        isAddDialogVisible,
-        () => {
-          // setDataSource(...data, ...dataSource)
-        },
-        () => {
-          setIsAddDialogVisible(false);
-        }
-      )}
+      <GameAddDialog
+        isOpen={isAddDialogVisible}
+        onSuccess={() => setIsAddDialogVisible(false)}
+        onClose={() => setIsAddDialogVisible(false)}
+      />
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
@@ -284,9 +126,9 @@ export function GamePage() {
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Соревнования">
           <Select value="1" placeholder="" style={{ width: "150px" }}>
-            <Select.Option key="1">Все</Select.Option>
-            <Select.Option key="2">В гостях</Select.Option>
-            <Select.Option key="3">Дома</Select.Option>
+            <Select.Option key="0">Все</Select.Option>
+            <Select.Option key="1">В гостях</Select.Option>
+            <Select.Option key="2">Дома</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item label="Дата проведения">
@@ -304,8 +146,9 @@ export function GamePage() {
       </Form>
       <Divider />
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={data}
+        loading={isLoading}
+        columns={gameTableColumns}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {

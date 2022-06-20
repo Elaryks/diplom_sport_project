@@ -1,34 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Input, Modal, Table } from "antd";
-
-const AddRoomDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Добавить место проведения"
-      cancelText="Отмена"
-      okText="Добавить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form layout="vertical">
-        <Form.Item label="Название">
-          <Input placeholder="Название" />
-        </Form.Item>
-        <Form.Item label="Контактные данные">
-          <Input placeholder="Контактные данные" />
-        </Form.Item>
-        <Form.Item label="Вместимость">
-          <Input placeholder="Вместимость" />
-        </Form.Item>
-        <Form.Item label="Адрес">
-          <Input placeholder="Адрес" />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-};
+import { RoomAddDialog } from "../../dialogs/RoomAddDialog";
+import { roomTableColumns } from "../../../constants/tableColumns/roomTable";
+import { api } from "../../../services";
+import { showMessage } from "../../../helpers/notifierHelpers";
 
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -77,92 +52,39 @@ export function RoomPage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
-  const columns = [
-    {
-      title: "Название",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Вместимость",
-      dataIndex: "people",
-      key: "people",
-    },
-    {
-      title: "Адрес",
-      dataIndex: "city",
-      key: "city",
-    },
-    {
-      title: "Контактные данные",
-      dataIndex: "contact",
-      key: "contact",
-    },
-    // {
-    //   title: "Действия",
-    //   key: "operation",
-    //   width: 100,
-    //   render: () => <a>Удалить</a>,
-    //   onCell: () => {
-    //     //
-    //   },
-    // },
-  ];
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const dataSource = [
-    {
-      key: "1",
-      name: "ТД-гарден",
-      contact: "+1-123-1234-1212",
-      people: "18 624",
-      city: "Бостон, Массачусетс, США",
-    },
-    {
-      key: "2",
-      name: "Барклайс-центр",
-      contact: "+1-123-1234-1212",
-      people: "18 000",
-      city: "Нью-Йорк (Бруклин), США",
-    },
-    {
-      key: "3",
-      name: "Мэдисон-сквер-гарден (IV)",
-      contact: "+1-123-1234-1212",
-      people: "19 763",
-      city: "Нью-Йорк (Манхэттен), США",
-    },
-    {
-      key: "4",
-      name: "Веллс-Фарго-центр",
-      contact: "+1-123-1234-1212",
-      people: "20 444",
-      city: "Филадельфия, Пенсильвания, США",
-    },
-    {
-      key: "5",
-      name: "Эйр Кэнада-центр",
-      contact: "+1-123-1234-1212",
-      people: "19 800",
-      city: "Торонто, Онтарио, Канада",
-    },
-    {
-      key: "6",
-      name: "Стэйт Фарм-арена",
-      contact: "+1-123-1234-1212",
-      people: "18 750",
-      city: "Атланта, Джорджия, США",
-    },
-  ];
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.location.getAll();
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setData(
+      r.map((item, i) => ({
+        key: i,
+        name: item.name,
+        contact: item.contact,
+        people: item.capacity,
+        city: item.address,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-stack-column spacing-2">
-      {AddRoomDialog(
-        isAddDialogVisible,
-        () => {},
-        () => {
-          setIsAddDialogVisible(false);
-        }
-      )}
+      <RoomAddDialog
+        isOpen={isAddDialogVisible}
+        onClose={() => setIsAddDialogVisible(false)}
+        onSuccess={() => setIsAddDialogVisible(false)}
+      />
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
@@ -188,8 +110,9 @@ export function RoomPage() {
       </Form>
       <Divider />
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={data}
+        loading={isLoading}
+        columns={roomTableColumns}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {

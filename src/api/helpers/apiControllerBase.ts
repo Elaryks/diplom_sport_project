@@ -12,7 +12,14 @@ export abstract class ApiControllerBase {
   }
 
   protected url(next: string = "") {
-    return "api/" + this.v + "/" + this.controllerName + (next != "" ? "/" + next : "");
+    // + this.v + "/" + this.controllerName +
+    const controllersToIgnorePrefix: string[] = ["auth"];
+    
+    return (
+      "api" +
+      (controllersToIgnorePrefix.indexOf(this.controllerName) == -1 ? "/" + this.controllerName : "") +
+      (next != "" ? "/" + next : "")
+    );
   }
 
   protected async process<T>(

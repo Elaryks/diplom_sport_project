@@ -1,111 +1,275 @@
-import React from "react";
-import { Button, DatePicker, Form, Input, Select, Typography } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, DatePicker, Form, Input, notification, Select, Spin, Typography } from "antd";
 import { FiAtSign, FiLock, FiUser } from "react-icons/fi";
+import { UserModel } from "../../../api/models/userModel";
+import { api } from "../../../services";
+import moment from "moment";
+import { useRootStore } from "../../../hooks/useRootStore";
+import { observer } from "mobx-react-lite";
 
-export function ProfilePage() {
-  const handleChange = () => {
-    //
+function Page() {
+  const { authStore } = useRootStore();
+
+  const [data, setData] = useState<UserModel | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const handleChange = async () => {
+    setIsLoading(true);
+    const r = await api.user.edit(data?.id as number, data as UserModel);
+    setIsLoading(false);
+    if (r == null) {
+      openNotification();
+      return;
+    }
+    await handleDataFetch();
+    // setData({ ...r, password: undefined });
   };
+
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.user.getById(authStore.getCurrentUserId as number);
+    setIsLoading(false);
+    if (r == null) {
+      openNotification();
+      return;
+    }
+    setData({ ...r, password: undefined });
+  };
+
+  const openNotification = () => {
+    // Функция для показа оповещения
+    notification["error"]({
+      message: "Ошибка",
+      description: "Что-то пошло не так",
+      placement: "bottomRight",
+    });
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-flex flex-column align-center justify-center" style={{ width: "100%", height: "100%" }}>
       <Typography.Title level={3} style={{ marginBottom: "24px" }}>
         Профиль
       </Typography.Title>
-      <Form
-        layout="vertical"
-        style={{ width: "560px" }}
-        name="loginForm"
-        className="login-form"
-        onFinish={handleChange}
-      >
-        <div className="d-stack spacing-2 align-end">
-          <Form.Item
-            style={{ flexBasis: "50%" }}
-            label="E-mail"
-            name="username"
-            rules={[{ required: true, message: "Пожалуйста, введите E-mail!" }]}
-          >
-            <Input prefix={<FiAtSign className="site-form-item-icon" />} placeholder="E-mail" />
-          </Form.Item>
-          <Form.Item
-            style={{ flexBasis: "50%" }}
-            label="Новый пароль"
-            name="password"
-            rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}
-          >
-            <Input.Password
-              prefix={<FiLock className="site-form-item-icon" />}
-              type="password"
-              placeholder="Новый пароль"
-            />
-          </Form.Item>
-        </div>
+      <Spin size="large" spinning={isLoading}>
+        <Form
+          requiredMark={false}
+          layout="vertical"
+          style={{ width: "560px" }}
+          name="loginForm"
+          className="login-form"
+          onFinish={handleChange}
+        >
+          <div className="d-stack spacing-2 align-end">
+            <Form.Item
+              style={{ flexBasis: "50%" }}
+              label="E-mail"
+              rules={[{ required: true, message: "Пожалуйста, введите E-mail!" }]}
+            >
+              <Input
+                value={data?.email}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    email: event.currentTarget.value,
+                  })
+                }
+                prefix={<FiAtSign className="site-form-item-icon" />}
+                placeholder="E-mail"
+                autoComplete="off"
+              />
+            </Form.Item>
+            <Form.Item
+              style={{ flexBasis: "50%" }}
+              label="Пароль"
+              rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}
+            >
+              <Input.Password
+                value={data?.password}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    password: event.currentTarget.value,
+                  })
+                }
+                prefix={<FiLock className="site-form-item-icon" />}
+                type="password"
+                placeholder="Пароль"
+                autoComplete="off"
+              />
+            </Form.Item>
+          </div>
 
-        <div className="d-stack-column spacing-2">
-          <Form.Item
-            className="flex-grow-1"
-            label="Фамилия"
-            name="lasName"
-            rules={[{ required: true, message: "Пожалуйста, введите Фамилию!" }]}
-          >
-            <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Фамилия" />
-          </Form.Item>
-          <Form.Item
-            style={{ flexBasis: "50%" }}
-            label="Имя"
-            name="firstName"
-            rules={[{ required: true, message: "Пожалуйста, введите имя!" }]}
-          >
-            <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Имя" />
-          </Form.Item>
-          <Form.Item style={{ flexBasis: "50%" }} label="Отчество (Если есть)" name="middleName">
-            <Input prefix={<FiUser className="site-form-item-icon" />} placeholder="Отчество (Если есть)" />
-          </Form.Item>
-        </div>
+          <div className="d-stack-column spacing-2">
+            <Form.Item
+              className="flex-grow-1"
+              label="Фамилия"
+              rules={[{ required: true, message: "Пожалуйста, введите фамилию!" }]}
+            >
+              <Input
+                value={data?.lastName}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    lastName: event.currentTarget.value,
+                  })
+                }
+                prefix={<FiUser className="site-form-item-icon" />}
+                placeholder="Фамилия"
+                autoComplete="off"
+              />
+            </Form.Item>
+            <Form.Item
+              style={{ flexBasis: "50%" }}
+              label="Имя"
+              rules={[{ required: true, message: "Пожалуйста, введите имя!" }]}
+            >
+              <Input
+                value={data?.firstName}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    firstName: event.currentTarget.value,
+                  })
+                }
+                prefix={<FiUser className="site-form-item-icon" />}
+                placeholder="Имя"
+              />
+            </Form.Item>
+            <Form.Item style={{ flexBasis: "50%" }} label="Отчество (Если есть)">
+              <Input
+                value={data?.middleName}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    middleName: event.currentTarget.value,
+                  })
+                }
+                prefix={<FiUser className="site-form-item-icon" />}
+                placeholder="Отчество (Если есть)"
+                autoComplete="off"
+              />
+            </Form.Item>
+          </div>
 
-        <div className="d-stack spacing-2 align-end">
-          <Form.Item style={{ flexBasis: "50%" }} name="role" label="Амплуа">
-            <Select placeholder="Амплуа">
-              <Select.Option key="1" children="Нападающий" />
-              <Select.Option key="2" children="Защитник" />
-              <Select.Option key="3" children="Центровой" />
-            </Select>
-          </Form.Item>
-          <Form.Item style={{ flexBasis: "50%" }} label="Дата рождения" name="birthday">
-            <DatePicker style={{ width: "100%" }} placeholder="Дата рождения" />
-          </Form.Item>
-        </div>
+          <div className="d-stack spacing-2 align-end">
+            <Form.Item
+              style={{ flexBasis: "50%" }}
+              label="Амплуа"
+              rules={[{ required: true, message: "Поле обязательно!" }]}
+            >
+              <Select
+                value={String(data?.amplua ?? "")}
+                onChange={(value) =>
+                  setData({
+                    ...data,
+                    amplua: Number(value ?? 0),
+                  })
+                }
+                placeholder="Амплуа"
+              >
+                <Select.Option key="0" children="Нападающий" />
+                <Select.Option key="1" children="Защитник" />
+                <Select.Option key="2" children="Центровой" />
+              </Select>
+            </Form.Item>
+            <Form.Item
+              style={{ flexBasis: "50%" }}
+              label="Дата рождения"
+              rules={[{ required: true, message: "Поле обязательно!" }]}
+            >
+              <DatePicker
+                value={data?.birthDate ? moment(data.birthDate) : undefined}
+                onChange={(value) =>
+                  setData({
+                    ...data,
+                    birthDate: value?.toDate()?.toISOString(),
+                  })
+                }
+                style={{ width: "100%" }}
+                placeholder="Дата рождения"
+              />
+            </Form.Item>
+          </div>
 
-        <div className="d-stack spacing-2 align-end">
-          <Form.Item style={{ flexBasis: "33%" }} name="height" label="Рост (см)">
-            <Input placeholder="Рост (см)" />
-          </Form.Item>
-          <Form.Item style={{ flexBasis: "33%" }} name="weight" label="Вес (кг)">
-            <Input placeholder="Вес (кг)" />
-          </Form.Item>
-          <Form.Item style={{ flexBasis: "33%" }} name="gender" label="Пол">
-            <Select placeholder="Пол">
-              <Select.Option key="1" children="Мужской" />
-              <Select.Option key="2" children="Женский" />
-            </Select>
-          </Form.Item>
-        </div>
+          <div className="d-stack spacing-2 align-end">
+            <Form.Item
+              style={{ flexBasis: "33%" }}
+              label="Рост (см)"
+              rules={[{ required: true, message: "Поле обязательно!" }]}
+            >
+              <Input
+                type="number"
+                value={Number(data?.height ?? 0)}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    height: Number(event.currentTarget.value ?? 0),
+                  })
+                }
+                min="0"
+                placeholder="Рост (см)"
+              />
+            </Form.Item>
+            <Form.Item
+              style={{ flexBasis: "33%" }}
+              label="Вес (кг)"
+              rules={[{ required: true, message: "Поле обязательно!" }]}
+            >
+              <Input
+                type="number"
+                value={Number(data?.weight ?? 0)}
+                onInput={(event: React.FormEvent<HTMLInputElement>) =>
+                  setData({
+                    ...data,
+                    weight: Number(event.currentTarget.value ?? 0),
+                  })
+                }
+                min="0"
+                placeholder="Вес (кг)"
+              />
+            </Form.Item>
+            <Form.Item
+              style={{ flexBasis: "33%" }}
+              label="Пол"
+              rules={[{ required: true, message: "Поле обязательно!" }]}
+            >
+              <Select
+                value={String(data?.gender ?? "")}
+                onChange={(value) =>
+                  setData({
+                    ...data,
+                    gender: Number(value ?? 0),
+                  })
+                }
+                placeholder="Пол"
+              >
+                <Select.Option key="0" children="Мужской" />
+                <Select.Option key="1" children="Женский" />
+              </Select>
+            </Form.Item>
+          </div>
 
-        {/*<Form.Item label="Функция" name="username">*/}
-        {/*  <Select placeholder="Функция">*/}
-        {/*    <Select.Option>Организатор</Select.Option>*/}
-        {/*    <Select.Option>Участник</Select.Option>*/}
-        {/*    <Select.Option>Администратор</Select.Option>*/}
-        {/*  </Select>*/}
-        {/*</Form.Item>*/}
+          {/*<Form.Item label="Функция" name="username">*/}
+          {/*  <Select placeholder="Функция">*/}
+          {/*    <Select.Option>Организатор</Select.Option>*/}
+          {/*    <Select.Option>Участник</Select.Option>*/}
+          {/*    <Select.Option>Администратор</Select.Option>*/}
+          {/*  </Select>*/}
+          {/*</Form.Item>*/}
 
-        <Form.Item>
-          <Button block type="primary" htmlType="submit" className="login-form-button">
-            Сохранить
-          </Button>
-        </Form.Item>
-      </Form>
+          <Form.Item>
+            <Button block type="primary" htmlType="submit" className="login-form-button">
+              Сохранить
+            </Button>
+          </Form.Item>
+        </Form>
+      </Spin>
     </div>
   );
 }
+
+export const ProfilePage = observer(Page);

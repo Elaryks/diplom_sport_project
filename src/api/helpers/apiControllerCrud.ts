@@ -23,7 +23,8 @@ export abstract class ApiControllerCrud<T, TFilter>
   }
 
   async edit(id: number, m: T, params?: any): Promise<T | null> {
-    return await this.process<T>(this.put(id.toString(), { data: m, params: params }));
+    // id.toString()
+    return await this.process<T>(this.put("", { data: m, params: params }));
   }
 
   async editPartially(

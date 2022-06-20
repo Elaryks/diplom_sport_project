@@ -1,5 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, DatePicker, Divider, Form, Input, Modal, Select, Table } from "antd";
+import { api } from "../../../services";
+import moment from "moment";
+import { getUserAmpluaById, getUserGenderById } from "../../../helpers/userHelpers";
+import { showMessage } from "../../../helpers/notifierHelpers";
+import { playerTableColumns } from "../../../constants/tableColumns/playerTable";
 
 const AddPlayerDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -48,6 +53,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
       cancelText="Отмена"
       okText="Сохранить"
       visible={open}
+      destroyOnClose
       onOk={handleOk}
       onCancel={handleCancel}
       footer={
@@ -68,7 +74,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
             <Input value={state.name} placeholder="Участник" />
           </Form.Item>
           <Form.Item label="Команда">
-            <Input value={state.team} placeholder="Команда" />
+            <Input value={state.teamId} placeholder="Команда" />
           </Form.Item>
           <Form.Item label="Амплуа">
             <Input value={state.role} placeholder="Амплуа" />
@@ -85,7 +91,7 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
             <Input value={state.weight} placeholder="Вес (кг)" />
           </Form.Item>
           <Form.Item label="Дата рождения">
-            <DatePicker style={{ width: "100%" }} placeholder="Дата рождения" />
+            <Input value={state.birthDate} placeholder="Дата рождения" />
             {/*<DatePicker style={{ width: "100%" }} placeholder="Дата рождения" />*/}
           </Form.Item>
         </Form>
@@ -99,157 +105,34 @@ export function PlayerPage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
-  const columns = [
-    {
-      title: "Участник",
-      dataIndex: "name",
-      key: "name",
-      width: "40%",
-    },
-    // {
-    //   title: "Команда",
-    //   dataIndex: "team",
-    //   key: "team",
-    // },
-    {
-      title: "Амплуа",
-      dataIndex: "role",
-      key: "role",
-    },
-    {
-      title: "Рост (см)",
-      dataIndex: "height",
-      key: "height",
-    },
-    {
-      title: "Вес (кг)",
-      dataIndex: "weight",
-      key: "weight",
-    },
-    {
-      title: "Пол",
-      dataIndex: "gender",
-      key: "gender",
-    },
-    {
-      title: "Дата рождения",
-      dataIndex: "birthday",
-      key: "birthday",
-    },
-  ];
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const dataSource = [
-    {
-      key: "1",
-      name: "Джеймс Харден",
-      team: "Хьюстон Рокетс",
-      role: "защитник",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "2",
-      name: "Пол Джордж",
-      team: "Оклахома-Сити Тандер",
-      role: "форвард",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "3",
-      name: "Яннис Адетокунбо",
-      team: "Милуоки Бакс",
-      role: "форвард",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "4",
-      name: "Джоэл Эмбиид",
-      team: "Филадельфия Сиксерс",
-      role: "центровой",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "5",
-      name: "Леброн Джеймс",
-      team: "Лос-Анджелес Лейкерс",
-      role: "форвард",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "6",
-      name: "Стефен Карри",
-      team: "Голден Стэйт Уорриорз",
-      role: "защитник",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "7",
-      name: "Кавай Леонард",
-      team: "Торонто Рэпторс",
-      role: "форвард",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "8",
-      name: "Девин Букер",
-      team: "Финикс Санз",
-      role: "защитник",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "9",
-      name: "Кевин Дюрант",
-      team: "Голден Стэйт Уорриорз",
-      role: "форвард",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "10",
-      name: "Энтони Дэвис",
-      team: "Нью-Орлеан Пеликанс",
-      role: "форвард",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-    {
-      key: "11",
-      name: "Дэмьен Лиллард",
-      team: "Портленд Трэйл Блэйзерс",
-      role: "защитник",
-      height: "157",
-      weight: "75",
-      birthday: "12.12.1984",
-      gender: "Мужской",
-    },
-  ];
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.user.getAll();
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setData(
+      r.map((item, i) => ({
+        key: i,
+        name: item.lastName + " " + item.firstName + " " + item.middleName,
+        team: item.teamId,
+        role: item.amplua != null ? getUserAmpluaById(item.amplua) : "",
+        height: item.height,
+        weight: item.weight,
+        birthDate: item.birthDate != null ? moment(item.birthDate).toDate().toLocaleDateString() : "",
+        gender: item.gender != null ? getUserGenderById(item.gender) : "",
+      }))
+    );
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-stack-column spacing-2">
@@ -289,8 +172,9 @@ export function PlayerPage() {
       </Form>
       <Divider />
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        loading={isLoading}
+        dataSource={data}
+        columns={playerTableColumns}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {

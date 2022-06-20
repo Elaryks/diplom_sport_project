@@ -1,34 +1,34 @@
 import React, { useState } from "react";
-import { Button, Form, Input, notification, Typography } from "antd";
+import { Button, Form, Input, Typography } from "antd";
 import { FiAtSign, FiLock } from "react-icons/fi/index";
 import { Link, useNavigate } from "react-router-dom";
 import { api } from "../../../services";
+import { AuthenticationModel } from "../../../api/models/authenticationModel";
+import { useRootStore } from "../../../hooks/useRootStore";
+import { showMessage } from "../../../helpers/notifierHelpers";
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const { authStore } = useRootStore();
 
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<AuthenticationModel>({
     email: "",
     password: "",
   });
 
   const handleLogin = async () => {
     // Функция для аутентификации пользователя
-    if (formState.email.length == 0 || formState.password.length == 0) return;
+    if ((formState.email ?? "").trim().length == 0 || (formState.password ?? "").length == 0) return;
     const res = await api.auth.logIn(formState);
     if (res == null) {
-      openNotification();
+      showMessage("Что-то пошло не так", "Убедитесь, что данные введены верно", "error");
       return;
     }
+    showMessage("Вы успешно авторизовались");
+    authStore.setRefreshToken(res.tokens.refreshToken);
+    authStore.setAccessToken(res.tokens.accessToken);
+    authStore.setUserData(res.user);
     navigate("/game");
-  };
-
-  const openNotification = () => {
-    // Функция для показа оповещения
-    notification["error"]({
-      message: "Ошибка входа",
-      description: "Убедитесь, что данные введены верно",
-    });
   };
 
   return (
@@ -40,7 +40,12 @@ export function LoginPage() {
         <Form.Item label="E-mail" name="username" rules={[{ required: true, message: "Пожалуйста, введите E-mail!" }]}>
           <Input
             value={formState.email}
-            onInput={(event: any) => setFormState({ ...formState, email: event.target.value })}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setFormState({
+                ...formState,
+                email: event.currentTarget.value,
+              })
+            }
             prefix={<FiAtSign className="site-form-item-icon" />}
             placeholder="E-mail"
           />
@@ -48,7 +53,12 @@ export function LoginPage() {
         <Form.Item label="Пароль" name="password" rules={[{ required: true, message: "Пожалуйста, введите пароль!" }]}>
           <Input.Password
             value={formState.password}
-            onInput={(event: any) => setFormState({ ...formState, password: event.target.value })}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setFormState({
+                ...formState,
+                password: event.currentTarget.value,
+              })
+            }
             prefix={<FiLock className="site-form-item-icon" />}
             type="password"
             placeholder="Пароль"
