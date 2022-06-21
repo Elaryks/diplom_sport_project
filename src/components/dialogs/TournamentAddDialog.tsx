@@ -79,26 +79,6 @@ function Dialog(props: ITournamentAddDialog) {
           />
         </Form.Item>
       </Form>
-      {/*<Form layout="vertical">*/}
-      {/*  <Form.Item label="Название">*/}
-      {/*    <Input*/}
-
-      {/*      placeholder="Название"*/}
-      {/*    />*/}
-      {/*  </Form.Item>*/}
-      {/*  <Form.Item label="Адрес">*/}
-      {/*    <Input*/}
-      {/*      value={formState.address}*/}
-      {/*      onInput={(event: React.FormEvent<HTMLInputElement>) =>*/}
-      {/*        setFormState({*/}
-      {/*          ...formState,*/}
-      {/*          address: event.currentTarget.value,*/}
-      {/*        })*/}
-      {/*      }*/}
-      {/*      placeholder="Адрес"*/}
-      {/*    />*/}
-      {/*  </Form.Item>*/}
-      {/*</Form>*/}
     </Modal>
   );
 }

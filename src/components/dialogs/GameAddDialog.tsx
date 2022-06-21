@@ -19,9 +19,10 @@ const initState: GameModel = {
   team2Id: undefined,
   countPointsTeam1: 0,
   countPointsTeam2: 0,
+  winningTeamId: undefined,
   dateEvent: "",
   tournamentId: undefined,
-  // locationId: 0,
+  locationId: undefined,
 };
 
 export function GameAddDialog(props: IGameAddDialog) {
@@ -63,7 +64,7 @@ export function GameAddDialog(props: IGameAddDialog) {
 
   const handleTeamsFetch = async (tournamentId: number) => {
     setTeamArray([]);
-    const r = await api.teamInTournament.getAll({ tournamentId });
+    const r = await api.team.getAll({ tournamentId });
     if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
       return;
