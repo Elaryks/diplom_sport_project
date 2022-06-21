@@ -7,6 +7,7 @@ import { showMessage } from "../../../helpers/notifierHelpers";
 import moment from "moment";
 import { observer } from "mobx-react-lite";
 import { useRootStore } from "../../../hooks/useRootStore";
+import { GameEditViewDialog } from "../../dialogs/GameEditViewDialog";
 
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -81,7 +82,7 @@ function Page() {
 
   const [isAddDialogVisible, setIsAddDialogVisible] = useState<boolean>(false);
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
-  const [rowDialogState, setRowDialogState] = useState<any>(null);
+  const [rowDialogItemId, setRowDialogItemId] = useState<number | null>(null);
 
   const [tableFilters, setTableFilters] = useState({
     gameTeamName: "",
@@ -108,6 +109,7 @@ function Page() {
     allCompetitions = rr;
     setData(
       r.map((item, i) => ({
+        id: item.id,
         key: i,
         competition: rr.find((c) => c.id == item.tournamentId)?.name ?? "",
         name: "",
@@ -130,15 +132,16 @@ function Page() {
         onSuccess={() => handleDataFetch()}
         onClose={() => setIsAddDialogVisible(false)}
       />
-      {RowDialog(
-        isRowDialogVisible,
-        rowDialogState,
-        () => {},
-        () => {
+      <GameEditViewDialog
+        isOpen={isRowDialogVisible}
+        itemId={rowDialogItemId}
+        isEditMode={authStore.getCurrentUserRole == 2 || authStore.getCurrentUserRole == 3}
+        onSuccess={() => handleDataFetch()}
+        onClose={() => {
           setIsRowDialogVisible(false);
-          setRowDialogState(null);
-        }
-      )}
+          setRowDialogItemId(null);
+        }}
+      />
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Соревнования">
           <Select value="0" placeholder="" style={{ width: "150px" }}>
@@ -190,7 +193,7 @@ function Page() {
             ((item.team1 ?? "")?.toLowerCase().includes((tableFilters.gameTeamName ?? "")?.toLowerCase()) ||
               (item.team2 ?? "")?.toLowerCase().includes((tableFilters.gameTeamName ?? "")?.toLowerCase())) &&
             (tableFilters.gameDate != null && item.date != null
-              ? moment(item.date).isSame(tableFilters.gameDate)
+              ? moment(item.date).isSame(tableFilters.gameDate, "date")
               : true)
         )}
         loading={isLoading}
@@ -198,7 +201,7 @@ function Page() {
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {
-              setRowDialogState(record);
+              setRowDialogItemId(record.id);
               setIsRowDialogVisible(true);
             },
           };

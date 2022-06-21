@@ -4,9 +4,9 @@ import { api } from "../../services";
 import { showMessage } from "../../helpers/notifierHelpers";
 import { GameModel } from "../../api/models/gameModel";
 import moment from "moment";
-import { TeamModel } from "../../api/models/teamModel";
 import { LocationModel } from "../../api/models/locationModel";
 import { TournamentModel } from "../../api/models/tournamentModel";
+import { TeamInTournamentModel } from "../../api/models/teamInTournamentModel";
 
 interface IGameAddDialog {
   isOpen: boolean;
@@ -29,7 +29,7 @@ export function GameAddDialog(props: IGameAddDialog) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formState, setFormState] = useState<GameModel>(initState);
 
-  const [teamArray, setTeamArray] = useState<TeamModel[]>([]);
+  const [teamArray, setTeamArray] = useState<TeamInTournamentModel[]>([]);
   const [locationArray, setLocationArray] = useState<LocationModel[]>([]);
   const [tournamentArray, setTournamentArray] = useState<TournamentModel[]>([]);
 
@@ -64,7 +64,7 @@ export function GameAddDialog(props: IGameAddDialog) {
 
   const handleTeamsFetch = async (tournamentId: number) => {
     setTeamArray([]);
-    const r = await api.team.getAll({ tournamentId });
+    const r = await api.teamInTournament.getAll({ tournamentId });
     if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
       return;
@@ -181,7 +181,7 @@ export function GameAddDialog(props: IGameAddDialog) {
               placeholder="Команда 1"
             >
               {teamArray.map((item) => (
-                <Select.Option key={item.id}>{item.name}</Select.Option>
+                <Select.Option key={item.id}>{item.tournamentTeam?.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -192,7 +192,7 @@ export function GameAddDialog(props: IGameAddDialog) {
               placeholder="Команда 2"
             >
               {teamArray.map((item) => (
-                <Select.Option key={item.id}>{item.name}</Select.Option>
+                <Select.Option key={item.id}>{item.tournamentTeam?.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
