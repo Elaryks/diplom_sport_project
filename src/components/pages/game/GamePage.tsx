@@ -180,8 +180,8 @@ function Page() {
       <Table
         dataSource={data.filter(
           (item) =>
-            (item.team1.toLowerCase().includes(tableFilters.gameTeamName.toLowerCase()) ||
-              item.team2.toLowerCase().includes(tableFilters.gameTeamName.toLowerCase())) &&
+            ((item.team1 ?? "")?.toLowerCase().includes((tableFilters.gameTeamName ?? "")?.toLowerCase()) ||
+              (item.team2 ?? "")?.toLowerCase().includes((tableFilters.gameTeamName ?? "")?.toLowerCase())) &&
             (tableFilters.gameDate != null && item.date != null
               ? moment(item.date).isSame(tableFilters.gameDate)
               : true)
