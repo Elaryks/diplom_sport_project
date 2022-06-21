@@ -67,7 +67,7 @@ function Dialog(props: IPlayerEditViewDialog) {
       tournamentId: props.itemId,
     } as TeamModel);
     if (r == null || r == false) {
-      showMessage("Что-то пошло не так", "Возможно, Вы уже участвуете в турнире", "error");
+      showMessage("Что-то пошло не так", "Вы уже участвуете в турнире", "error");
       return;
     }
     showMessage("Вы успешно приняли участие");
