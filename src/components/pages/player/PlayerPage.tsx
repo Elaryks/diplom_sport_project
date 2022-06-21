@@ -59,7 +59,7 @@ export function PlayerPage() {
     }
     setData(
       r
-        // .filter((i) => i.role == 1)
+        .filter((i) => i.role == 1)
         .map((item, i) => ({
           id: item.id,
           key: i,

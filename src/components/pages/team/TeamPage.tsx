@@ -91,11 +91,13 @@ function Page() {
           />
         </Form.Item>
         <div className="flex-grow-1" />
-        <Form.Item label=" ">
-          <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
-            Добавить
-          </Button>
-        </Form.Item>
+        {(authStore.getCurrentUserRole == 2 || authStore.getCurrentUserRole == 3) && (
+          <Form.Item label=" ">
+            <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
+              Добавить
+            </Button>
+          </Form.Item>
+        )}
       </Form>
       <Divider />
       <Table

@@ -5,6 +5,8 @@ import { GameAddDialog } from "../../dialogs/GameAddDialog";
 import { api } from "../../../services";
 import { showMessage } from "../../../helpers/notifierHelpers";
 import moment from "moment";
+import { observer } from "mobx-react-lite";
+import { useRootStore } from "../../../hooks/useRootStore";
 
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -74,7 +76,9 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
   );
 };
 
-export function GamePage() {
+function Page() {
+  const { authStore } = useRootStore()
+
   const [isAddDialogVisible, setIsAddDialogVisible] = useState<boolean>(false);
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
@@ -117,7 +121,8 @@ export function GamePage() {
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
-        () => {},
+        () => {
+        },
         () => {
           setIsRowDialogVisible(false);
           setRowDialogState(null);
@@ -138,11 +143,13 @@ export function GamePage() {
           <Input placeholder="Название команды" style={{ width: "250px" }} />
         </Form.Item>
         <div className="flex-grow-1" />
-        <Form.Item label=" ">
-          <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
-            Добавить
-          </Button>
-        </Form.Item>
+        {(authStore.getCurrentUserRole == 2 || authStore.getCurrentUserRole == 3) &&
+          <Form.Item label=" ">
+            <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
+              Добавить
+            </Button>
+          </Form.Item>
+        }
       </Form>
       <Divider />
       <Table
@@ -161,3 +168,5 @@ export function GamePage() {
     </div>
   );
 }
+
+export const GamePage = observer(Page)

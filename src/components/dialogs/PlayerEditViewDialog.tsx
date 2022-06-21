@@ -52,6 +52,20 @@ function Dialog(props: IPlayerEditViewDialog) {
     handleCancel();
   };
 
+  const setUserAsManager = async () => {
+    if (formState == null) return;
+    setIsLoading(true);
+    const r = await api.user.edit(formState?.id as number, { ...formState, role: 3 });
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    showMessage("Участник успешно сделан организатором");
+    props.onSuccess();
+    handleCancel();
+  };
+
   const handleOk = async () => {
     await handleSave();
   };
@@ -82,6 +96,19 @@ function Dialog(props: IPlayerEditViewDialog) {
       onCancel={handleCancel}
       footer={
         <>
+          {authStore.getCurrentUserRole == 3 && formState?.role != 3 && (
+            <Button
+              style={{
+                float: "left",
+                background: "green",
+                borderColor: "green",
+              }}
+              onClick={() => setUserAsManager()}
+              type="primary"
+            >
+              Сделать организатором
+            </Button>
+          )}
           <Button onClick={() => handleCancel()}>Отмена</Button>
           {props.isEditMode && (
             <Button onClick={() => handleOk()} type="primary">
