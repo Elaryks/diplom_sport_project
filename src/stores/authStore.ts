@@ -65,9 +65,9 @@ export class AuthStore {
     localStorageHelpers.set(this.lsKeys.currentUserId, currentUserId);
   }
 
-  setCurrentUserRole(currentUserId: number | null): void {
-    this.currentUserId = currentUserId;
-    localStorageHelpers.set(this.lsKeys.currentUserRole, currentUserId);
+  setCurrentUserRole(currentUserRole: number | null): void {
+    this.currentUserRole = currentUserRole;
+    localStorageHelpers.set(this.lsKeys.currentUserRole, currentUserRole);
   }
 
   get getRefreshToken(): string | null {
