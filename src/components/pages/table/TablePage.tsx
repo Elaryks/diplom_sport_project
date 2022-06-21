@@ -4,37 +4,6 @@ import { tableTableColumns } from "../../../constants/tableColumns/tableTable";
 import { api } from "../../../services";
 import { showMessage } from "../../../helpers/notifierHelpers";
 
-const AddTournamentDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Добавить турнир"
-      cancelText="Отмена"
-      okText="Добавить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-    >
-      <Form style={{ pointerEvents: "none" }} layout="vertical">
-        <Form.Item label="Команда">
-          <Input placeholder="Команда" />
-        </Form.Item>
-        <div className="d-stack spacing-2">
-          <Form.Item label="Матчи">
-            <Input placeholder="Матчи" />
-          </Form.Item>
-          <Form.Item label="Выиграно">
-            <Input placeholder="Выиграно" />
-          </Form.Item>
-          <Form.Item label="Проиграно">
-            <Input placeholder="Проиграно" />
-          </Form.Item>
-        </div>
-      </Form>
-    </Modal>
-  );
-};
-
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
     <Modal
@@ -84,6 +53,10 @@ export function TablePage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
+  const [tableFilters, setTableFilters] = useState({
+    tournamentTeamName: "",
+  });
+
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -131,12 +104,24 @@ export function TablePage() {
           </Select>
         </Form.Item>
         <Form.Item label="Команда">
-          <Input placeholder="Название команды" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.tournamentTeamName}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                tournamentTeamName: event.currentTarget.value,
+              })
+            }
+            placeholder="Название команды"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
       </Form>
       <Divider />
       <Table
-        dataSource={data}
+        dataSource={data.filter((item) =>
+          item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase())
+        )}
         columns={tableTableColumns}
         loading={isLoading}
         onRow={(record, rowIndex) => {
