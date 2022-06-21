@@ -13,7 +13,7 @@ export class AuthStore {
     accessToken: "accessToken",
     userData: "userData",
     currentUserId: "currentUserId",
-    currentUserRole: "currentUserRole"
+    currentUserRole: "currentUserRole",
     // initialInfo: "initialInfo",
   };
 
@@ -67,7 +67,7 @@ export class AuthStore {
 
   setCurrentUserRole(currentUserId: number | null): void {
     this.currentUserId = currentUserId;
-    localStorageHelpers.set(this.lsKeys.currentUserId, currentUserId);
+    localStorageHelpers.set(this.lsKeys.currentUserRole, currentUserId);
   }
 
   get getRefreshToken(): string | null {
