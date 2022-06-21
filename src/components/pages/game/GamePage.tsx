@@ -92,6 +92,7 @@ function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleDataFetch = async () => {
+    let allCompetitions = [];
     setIsLoading(true);
     const r = await api.game.getAll();
     setIsLoading(false);
@@ -99,10 +100,16 @@ function Page() {
       showMessage("Что-то пошло не так", undefined, "error");
       return;
     }
+    const rr = await api.tournament.getAll();
+    if (rr == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    allCompetitions = rr;
     setData(
       r.map((item, i) => ({
         key: i,
-        competition: item.dateEvent,
+        competition: rr.find((c) => c.id == item.tournamentId)?.name ?? "",
         name: "",
         team1: item.team1?.team?.name,
         team2: item.team2?.team?.name,
