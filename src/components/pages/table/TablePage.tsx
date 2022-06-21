@@ -136,11 +136,15 @@ export function TablePage() {
       </Form>
       <Divider />
       <Table
-        dataSource={data.filter(
-          (item) =>
-            item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase()) &&
-            (tableFilters.tournamentId != null ? item.tournamentId == tableFilters.tournamentId : true)
-        )}
+        dataSource={
+          tableFilters.tournamentId != null
+            ? data.filter(
+                (item) =>
+                  item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase()) &&
+                  (tableFilters.tournamentId != null ? item.tournamentId == tableFilters.tournamentId : true)
+              )
+            : []
+        }
         columns={tableTableColumns}
         loading={isLoading}
         onRow={(record, rowIndex) => {

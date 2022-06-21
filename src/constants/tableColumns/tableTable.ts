@@ -1,10 +1,10 @@
 export const tableTableColumns = [
-  {
-    title: "Номер",
-    dataIndex: "index",
-    key: "index",
-    width: "1%",
-  },
+  // {
+  //   title: "Номер",
+  //   dataIndex: "index",
+  //   key: "index",
+  //   width: "1%",
+  // },
   {
     title: "Команда",
     dataIndex: "team",
