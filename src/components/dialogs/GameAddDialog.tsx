@@ -60,7 +60,7 @@ export function GameAddDialog(props: IGameAddDialog) {
 
   const handleTeamsFetch = async (tournamentId: number) => {
     setTeamArray([]);
-    const r = await api.team.getAll({ tournamentId });
+    const r = await api.teamInTournament.getAll({ tournamentId });
     if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
       return;
