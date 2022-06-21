@@ -5,6 +5,7 @@ import { showMessage } from "../../helpers/notifierHelpers";
 import { GameModel } from "../../api/models/gameModel";
 import moment from "moment";
 import { TeamModel } from "../../api/models/teamModel";
+import { LocationModel } from "../../api/models/locationModel";
 
 interface IGameAddDialog {
   isOpen: boolean;
@@ -27,6 +28,7 @@ export function GameAddDialog(props: IGameAddDialog) {
   const [formState, setFormState] = useState<GameModel>(initState);
 
   const [teamArray, setTeamArray] = useState<TeamModel[]>([]);
+  const [locationArray, setLocationArray] = useState<LocationModel[]>([]);
   const [tournamentArray, setTournamentArray] = useState<TeamModel[]>([]);
 
   const handleCreate = async () => {
@@ -49,6 +51,7 @@ export function GameAddDialog(props: IGameAddDialog) {
       return;
     }
     setTournamentArray(r);
+    await handleLocationsFetch();
   };
 
   const handleTeamsFetch = async (tournamentId: number) => {
@@ -59,6 +62,16 @@ export function GameAddDialog(props: IGameAddDialog) {
       return;
     }
     setTeamArray(r);
+  };
+
+  const handleLocationsFetch = async () => {
+    setLocationArray([]);
+    const r = await api.location.getAll();
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setLocationArray(r);
   };
 
   useEffect(() => {
@@ -141,6 +154,17 @@ export function GameAddDialog(props: IGameAddDialog) {
             </Form.Item>
           </div>
         </div>
+        <Form.Item label="Место проведения">
+          <Select
+            value={formState.locationId ? String(formState.locationId) : undefined}
+            onChange={(value) => setFormState({ ...formState, locationId: Number(value) })}
+            placeholder="Место проведения"
+          >
+            {locationArray.map((item) => (
+              <Select.Option key={item.id}>{item.name}</Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
         <div className="d-stack spacing-2">
           <Form.Item label="Команда 1" style={{ flexBasis: "50%" }}>
             <Select
