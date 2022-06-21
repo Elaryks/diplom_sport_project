@@ -111,8 +111,8 @@ function Page() {
         key: i,
         competition: rr.find((c) => c.id == item.tournamentId)?.name ?? "",
         name: "",
-        team1: item.team1?.team?.name,
-        team2: item.team2?.team?.name,
+        team1: item.team1?.tournamentTeam?.name,
+        team2: item.team2?.tournamentTeam?.name,
         result: item.countPointsTeam1 ?? 0 + " - " + item.countPointsTeam2 ?? 0,
         date: moment(item.dateEvent)?.toDate().toLocaleDateString(),
       }))
