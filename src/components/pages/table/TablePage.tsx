@@ -71,7 +71,7 @@ export function TablePage() {
     setData(
       r.map((item, i) => ({
         key: i,
-        index: i,
+        index: i + 1,
         team: item.tournamentTeam?.name,
         ga: item.countGames,
         gw: item.countWins,
