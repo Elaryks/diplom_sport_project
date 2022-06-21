@@ -1,56 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider, Form, Input, Modal, Table } from "antd";
+import { Button, Divider, Form, Input, Table } from "antd";
 import { RoomAddDialog } from "../../dialogs/RoomAddDialog";
 import { roomTableColumns } from "../../../constants/tableColumns/roomTable";
 import { api } from "../../../services";
 import { showMessage } from "../../../helpers/notifierHelpers";
+import { RoomEditViewDialog } from "../../dialogs/RoomEditViewDialog";
+import { observer } from "mobx-react-lite";
+import { useRootStore } from "../../../hooks/useRootStore";
 
-const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Редактировать место проведения"
-      cancelText="Отмена"
-      okText="Сохранить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      footer={
-        <>
-          <Button danger style={{ float: "left" }}>
-            Удалить
-          </Button>
-          <Button onClick={() => handleCancel()}>Отмена</Button>
-          <Button onClick={() => handleOk()} type="primary">
-            Сохранить
-          </Button>
-        </>
-      }
-    >
-      {state != null && (
-        <Form layout="vertical">
-          <Form.Item label="Название">
-            <Input value={state.name} placeholder="Название" />
-          </Form.Item>
-          <Form.Item label="Контактные данные">
-            <Input value={state.contact} placeholder="Контактные данные" />
-          </Form.Item>
-          <Form.Item label="Вместимость">
-            <Input value={state.people} placeholder="Вместимость" />
-          </Form.Item>
-          <Form.Item label="Адрес">
-            <Input value={state.city} placeholder="Адрес" />
-          </Form.Item>
-        </Form>
-      )}
-    </Modal>
-  );
-};
+function Page() {
+  const { authStore } = useRootStore();
 
-export function RoomPage() {
   const [isAddDialogVisible, setIsAddDialogVisible] = useState<boolean>(false);
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
-  const [rowDialogState, setRowDialogState] = useState<any>(null);
+  const [rowDialogItemId, setRowDialogItemId] = useState<number | null>(null);
 
   const [tableFilters, setTableFilters] = useState({
     roomName: "",
@@ -70,6 +33,7 @@ export function RoomPage() {
     }
     setData(
       r.map((item, i) => ({
+        id: item.id,
         key: i,
         name: item.name,
         contact: item.contact,
@@ -90,15 +54,16 @@ export function RoomPage() {
         onSuccess={() => handleDataFetch()}
         onClose={() => setIsAddDialogVisible(false)}
       />
-      {RowDialog(
-        isRowDialogVisible,
-        rowDialogState,
-        () => {},
-        () => {
+      <RoomEditViewDialog
+        isOpen={isRowDialogVisible}
+        itemId={rowDialogItemId}
+        isEditMode={authStore.getCurrentUserRole == 3}
+        onSuccess={() => handleDataFetch()}
+        onClose={() => {
           setIsRowDialogVisible(false);
-          setRowDialogState(null);
-        }
-      )}
+          setRowDialogItemId(null);
+        }}
+      />
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Место проведения">
           <Input
@@ -145,7 +110,7 @@ export function RoomPage() {
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {
-              setRowDialogState(record);
+              setRowDialogItemId(record.id);
               setIsRowDialogVisible(true);
             },
           };
@@ -154,3 +119,5 @@ export function RoomPage() {
     </div>
   );
 }
+
+export const RoomPage = observer(Page);

@@ -14,7 +14,7 @@ export abstract class ApiControllerBase {
   protected url(next: string = "") {
     // + this.v + "/" + this.controllerName +
     const controllersToIgnorePrefix: string[] = ["auth"];
-    
+
     return (
       "api" +
       (controllersToIgnorePrefix.indexOf(this.controllerName) == -1 ? "/" + this.controllerName : "") +
@@ -66,7 +66,8 @@ export abstract class ApiControllerBase {
     url: string,
     config?: AxiosRequestConfig<D>
   ): Promise<T> {
-    return await ApiControllerBase.requestInternal(this.client.delete(this.url(url), config));
+    return await ApiControllerBase.requestInternal(this.client.delete(this.url(url), { data: config?.data }));
+    // return await ApiControllerBase.requestInternal(this.client.delete(this.url(""), config?.data));
   }
 
   private static async requestInternal<T = any>(req: Promise<AxiosResponse<T>>) {

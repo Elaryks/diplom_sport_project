@@ -14,12 +14,17 @@ export abstract class ApiControllerCrud<T, TFilter>
     return await this.process<T>(this.post("", { data: m }));
   }
 
-  async del(id: number): Promise<boolean | null> {
+  async del(m: T): Promise<boolean | null> {
     return await this.process<boolean>(
-      this.delete(id.toString()),
+      this.delete("", { data: m }),
       () => true,
       () => false
     );
+    // return await this.process<boolean>(
+    //   this.delete(m),
+    //   () => true,
+    //   () => false
+    // );
   }
 
   async edit(id: number, m: T, params?: any): Promise<T | null> {

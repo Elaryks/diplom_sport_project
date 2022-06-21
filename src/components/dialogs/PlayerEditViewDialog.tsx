@@ -74,7 +74,7 @@ function Dialog(props: IPlayerEditViewDialog) {
   return (
     <Modal
       centered
-      title={props.isEditMode ? "Редактировать участника" : "Просмотреть участника"}
+      title="Участник"
       cancelText="Отмена"
       okText="Сохранить"
       visible={props.isOpen}

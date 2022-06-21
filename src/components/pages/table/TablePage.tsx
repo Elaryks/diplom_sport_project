@@ -15,7 +15,7 @@ const AddTournamentDialog = (open: boolean, handleOk: () => void, handleCancel: 
       onOk={handleOk}
       onCancel={handleCancel}
     >
-      <Form layout="vertical">
+      <Form style={{ pointerEvents: "none" }} layout="vertical">
         <Form.Item label="Команда">
           <Input placeholder="Команда" />
         </Form.Item>
@@ -99,7 +99,7 @@ export function TablePage() {
       r.map((item, i) => ({
         key: i,
         index: i,
-        team: item.team?.name,
+        team: item.tournamentTeam?.name,
         ga: item.countGames,
         gw: item.countWins,
         gl: item.countDefeats,

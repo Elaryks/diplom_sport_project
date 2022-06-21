@@ -1,48 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Button, Divider, Form, Input, Modal, Table } from "antd";
+import { Button, Divider, Form, Input, Table } from "antd";
 import { tournamentTableColumns } from "../../../constants/tableColumns/tournamentTable";
 import { api } from "../../../services";
 import { showMessage } from "../../../helpers/notifierHelpers";
 import { TournamentModel } from "../../../api/models/tournamentModel";
 import { TournamentAddDialog } from "../../dialogs/TournamentAddDialog";
+import { useRootStore } from "../../../hooks/useRootStore";
+import { observer } from "mobx-react-lite";
+import { TournamentEditViewDialog } from "../../dialogs/TournamentEditViewDialog";
 
-const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Редактировать соревнование"
-      cancelText="Отмена"
-      okText="Сохранить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      footer={
-        <>
-          <Button danger style={{ float: "left" }}>
-            Удалить
-          </Button>
-          <Button onClick={() => handleCancel()}>Отмена</Button>
-          <Button onClick={() => handleOk()} type="primary">
-            Сохранить
-          </Button>
-        </>
-      }
-    >
-      {state != null && (
-        <Form layout="vertical">
-          <Form.Item label="Название">
-            <Input value={state.name} placeholder="Название" />
-          </Form.Item>
-        </Form>
-      )}
-    </Modal>
-  );
-};
+function Page() {
+  const { authStore } = useRootStore();
 
-export function TournamentPage() {
   const [isAddDialogVisible, setIsAddDialogVisible] = useState<boolean>(false);
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
-  const [rowDialogState, setRowDialogState] = useState<any>(null);
+  const [rowDialogItemId, setRowDialogItemId] = useState<number | null>(null);
 
   const [tableFilters, setTableFilters] = useState({
     tournamentName: "",
@@ -68,6 +40,7 @@ export function TournamentPage() {
   const generateTableRow = async (item: TournamentModel) => {
     const gamesLength = await getGamesInTournamentById(item.id as number);
     return {
+      id: item.id,
       key: item.id,
       name: item.name,
       manager:
@@ -77,7 +50,8 @@ export function TournamentPage() {
   };
 
   const getGamesInTournamentById = async (tournamentId: number): Promise<number> => {
-    const r = await api.game.getAll({ tournamentId });
+    const r = await api.teamInTournament.getAll({ tournamentId });
+    // const r = await api.game.getAll({ tournamentId });
     if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
       return 0;
@@ -96,15 +70,16 @@ export function TournamentPage() {
         onSuccess={() => handleDataFetch()}
         onClose={() => setIsAddDialogVisible(false)}
       />
-      {RowDialog(
-        isRowDialogVisible,
-        rowDialogState,
-        () => {},
-        () => {
+      <TournamentEditViewDialog
+        isOpen={isRowDialogVisible}
+        itemId={rowDialogItemId}
+        isEditMode={false}
+        onSuccess={() => handleDataFetch()}
+        onClose={() => {
           setIsRowDialogVisible(false);
-          setRowDialogState(null);
-        }
-      )}
+          setRowDialogItemId(null);
+        }}
+      />
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Соревнование">
           <Input
@@ -151,7 +126,7 @@ export function TournamentPage() {
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {
-              setRowDialogState(record);
+              setRowDialogItemId(record.id);
               setIsRowDialogVisible(true);
             },
           };
@@ -160,3 +135,5 @@ export function TournamentPage() {
     </div>
   );
 }
+
+export const TournamentPage = observer(Page);

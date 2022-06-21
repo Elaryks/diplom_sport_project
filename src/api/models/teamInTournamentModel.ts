@@ -4,6 +4,7 @@ export type TeamInTournamentModel = {
   id?: number;
   teamId?: number;
   tournamentId?: number;
+  tournamentTeam?: TeamModel;
   team?: TeamModel;
   countWins?: number;
   countGames?: number;

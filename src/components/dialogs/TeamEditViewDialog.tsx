@@ -101,7 +101,7 @@ function Dialog(props: ITeamEditViewDialog) {
   return (
     <Modal
       centered
-      title={props.isEditMode ? "Редактировать команду" : "Просмотреть команду"}
+      title="Команда"
       cancelText="Отмена"
       okText="Сохранить"
       visible={props.isOpen}
