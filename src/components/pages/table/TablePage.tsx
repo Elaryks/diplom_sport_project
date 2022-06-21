@@ -3,6 +3,7 @@ import { Button, Divider, Form, Input, Modal, Select, Table } from "antd";
 import { tableTableColumns } from "../../../constants/tableColumns/tableTable";
 import { api } from "../../../services";
 import { showMessage } from "../../../helpers/notifierHelpers";
+import { TournamentModel } from "../../../api/models/tournamentModel";
 
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -53,7 +54,10 @@ export function TablePage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
+  const [tournamentArray, setTournamentArray] = useState<TournamentModel[]>([]);
+
   const [tableFilters, setTableFilters] = useState({
+    tournamentId: undefined,
     tournamentTeamName: "",
   });
 
@@ -68,9 +72,16 @@ export function TablePage() {
       showMessage("Что-то пошло не так", undefined, "error");
       return;
     }
+    const rr = await api.tournament.getAll();
+    if (rr == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setTournamentArray(rr);
     setData(
       r.map((item, i) => ({
         key: i,
+        tournamentId: item.tournamentId,
         index: i + 1,
         team: item.tournamentTeam?.name,
         ga: item.countGames,
@@ -96,11 +107,17 @@ export function TablePage() {
         }
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
-        <Form.Item label="Соревнования">
-          <Select value="0" placeholder="" style={{ width: "150px" }}>
-            <Select.Option key="0">Все</Select.Option>
-            <Select.Option key="1">В гостях</Select.Option>
-            <Select.Option key="2">Дома</Select.Option>
+        <Form.Item label="Соревнование">
+          <Select
+            allowClear
+            value={tableFilters.tournamentId}
+            onChange={(value) => setTableFilters({ ...tableFilters, tournamentId: value })}
+            placeholder="Соревнование"
+            style={{ width: "150px" }}
+          >
+            {tournamentArray.map((t) => (
+              <Select.Option key={t.id}>{t.name}</Select.Option>
+            ))}
           </Select>
         </Form.Item>
         <Form.Item label="Команда">
@@ -119,8 +136,10 @@ export function TablePage() {
       </Form>
       <Divider />
       <Table
-        dataSource={data.filter((item) =>
-          item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase())
+        dataSource={data.filter(
+          (item) =>
+            item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase()) &&
+            (tableFilters.tournamentId != null ? item.tournamentId == tableFilters.tournamentId : true)
         )}
         columns={tableTableColumns}
         loading={isLoading}
