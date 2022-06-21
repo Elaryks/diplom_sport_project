@@ -37,7 +37,9 @@ export function GameAddDialog(props: IGameAddDialog) {
     const r = await api.game.create({
       ...formState,
       winningTeamId:
-        (formState?.team1Id as number) > (formState?.team2Id as number) ? formState.team1Id : formState.team2Id,
+        (formState?.countPointsTeam1 as number) > (formState?.countPointsTeam2 as number)
+          ? formState.team1Id
+          : formState.team2Id,
     });
     setIsLoading(false);
     if (r == null) {
