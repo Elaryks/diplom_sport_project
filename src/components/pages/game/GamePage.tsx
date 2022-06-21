@@ -77,11 +77,16 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
 };
 
 function Page() {
-  const { authStore } = useRootStore()
+  const { authStore } = useRootStore();
 
   const [isAddDialogVisible, setIsAddDialogVisible] = useState<boolean>(false);
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
+
+  const [tableFilters, setTableFilters] = useState({
+    gameTeamName: "",
+    gameDate: null,
+  });
 
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -121,8 +126,7 @@ function Page() {
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
-        () => {
-        },
+        () => {},
         () => {
           setIsRowDialogVisible(false);
           setRowDialogState(null);
@@ -130,30 +134,58 @@ function Page() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Соревнования">
-          <Select value="1" placeholder="" style={{ width: "150px" }}>
+          <Select value="0" placeholder="" style={{ width: "150px" }}>
             <Select.Option key="0">Все</Select.Option>
             <Select.Option key="1">В гостях</Select.Option>
             <Select.Option key="2">Дома</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item label="Дата проведения">
-          <DatePicker style={{ width: "100%" }} placeholder="Дата проведения" />
+          <DatePicker
+            allowClear
+            value={tableFilters.gameDate}
+            onChange={(value) =>
+              setTableFilters({
+                ...tableFilters,
+                gameDate: value as any,
+              })
+            }
+            style={{ width: "100%" }}
+            placeholder="Дата проведения"
+          />
         </Form.Item>
         <Form.Item label="Команда">
-          <Input placeholder="Название команды" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.gameTeamName}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                gameTeamName: event.currentTarget.value,
+              })
+            }
+            placeholder="Название команды"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <div className="flex-grow-1" />
-        {(authStore.getCurrentUserRole == 2 || authStore.getCurrentUserRole == 3) &&
+        {(authStore.getCurrentUserRole == 2 || authStore.getCurrentUserRole == 3) && (
           <Form.Item label=" ">
             <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
               Добавить
             </Button>
           </Form.Item>
-        }
+        )}
       </Form>
       <Divider />
       <Table
-        dataSource={data}
+        dataSource={data.filter(
+          (item) =>
+            item.team1.toLowerCase().includes(tableFilters.gameTeamName.toLowerCase()) ||
+            (item.team2.toLowerCase().includes(tableFilters.gameTeamName.toLowerCase()) &&
+              (tableFilters.gameDate != null && item.date != null
+                ? moment(item.date).isSame(tableFilters.gameDate)
+                : true))
+        )}
         loading={isLoading}
         columns={gameTableColumns}
         onRow={(record, rowIndex) => {
@@ -169,4 +201,4 @@ function Page() {
   );
 }
 
-export const GamePage = observer(Page)
+export const GamePage = observer(Page);
