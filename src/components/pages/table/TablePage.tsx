@@ -138,11 +138,13 @@ export function TablePage() {
       <Table
         dataSource={
           tableFilters.tournamentId != null
-            ? data.filter(
-                (item) =>
-                  item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase()) &&
-                  (tableFilters.tournamentId != null ? item.tournamentId == tableFilters.tournamentId : true)
-              )
+            ? data
+                .filter(
+                  (item) =>
+                    item.team.toLowerCase().includes(tableFilters.tournamentTeamName.toLowerCase()) &&
+                    (tableFilters.tournamentId != null ? item.tournamentId == tableFilters.tournamentId : true)
+                )
+                ?.sort((a, b) => (a.ga ?? 0) - (b.ga ?? 0))
             : []
         }
         columns={tableTableColumns}
