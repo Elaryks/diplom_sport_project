@@ -16,7 +16,7 @@ function Page() {
 
   const handleChange = async () => {
     setIsLoading(true);
-    const r = await api.user.edit(data?.id as number, data as UserModel);
+    const r = await api.user.edit(data?.id as number, { ...data, password: undefined } as UserModel);
     setIsLoading(false);
     if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
