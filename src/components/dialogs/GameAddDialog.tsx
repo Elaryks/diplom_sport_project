@@ -178,7 +178,7 @@ export function GameAddDialog(props: IGameAddDialog) {
               placeholder="Команда 1"
             >
               {teamArray.map((item) => (
-                <Select.Option key={item.id}>{item.team?.name}</Select.Option>
+                <Select.Option key={item.id}>{item.tournamentTeam?.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -189,7 +189,7 @@ export function GameAddDialog(props: IGameAddDialog) {
               placeholder="Команда 2"
             >
               {teamArray.map((item) => (
-                <Select.Option key={item.id}>{item.team?.name}</Select.Option>
+                <Select.Option key={item.id}>{item.tournamentTeam?.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
