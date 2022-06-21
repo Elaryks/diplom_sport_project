@@ -37,10 +37,10 @@ export function SignupPage() {
       return;
     }
     showMessage("Вы успешно зарегистрировались");
-    // authStore.setRefreshToken(res.tokens.refreshToken);
-    // authStore.setAccessToken(res.tokens.accessToken);
-    // authStore.setUserData(res.user);
-    // navigate("/game");
+    authStore.setRefreshToken(res.tokens.refreshToken);
+    authStore.setAccessToken(res.tokens.accessToken);
+    authStore.setUserData(res.user);
+    navigate("/game");
   };
 
   return (
