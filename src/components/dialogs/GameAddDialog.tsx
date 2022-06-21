@@ -6,7 +6,7 @@ import { GameModel } from "../../api/models/gameModel";
 import moment from "moment";
 import { TeamModel } from "../../api/models/teamModel";
 import { LocationModel } from "../../api/models/locationModel";
-import { TeamInTournamentModel } from "../../api/models/teamInTournamentModel";
+import { TournamentModel } from "../../api/models/tournamentModel";
 
 interface IGameAddDialog {
   isOpen: boolean;
@@ -28,9 +28,9 @@ export function GameAddDialog(props: IGameAddDialog) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formState, setFormState] = useState<GameModel>(initState);
 
-  const [teamArray, setTeamArray] = useState<TeamInTournamentModel[]>([]);
+  const [teamArray, setTeamArray] = useState<TeamModel[]>([]);
   const [locationArray, setLocationArray] = useState<LocationModel[]>([]);
-  const [tournamentArray, setTournamentArray] = useState<TeamModel[]>([]);
+  const [tournamentArray, setTournamentArray] = useState<TournamentModel[]>([]);
 
   const handleCreate = async () => {
     setIsLoading(true);
@@ -180,7 +180,7 @@ export function GameAddDialog(props: IGameAddDialog) {
               placeholder="Команда 1"
             >
               {teamArray.map((item) => (
-                <Select.Option key={item.teamId}>{item.tournamentTeam?.name}</Select.Option>
+                <Select.Option key={item.id}>{item.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
@@ -191,7 +191,7 @@ export function GameAddDialog(props: IGameAddDialog) {
               placeholder="Команда 2"
             >
               {teamArray.map((item) => (
-                <Select.Option key={item.teamId}>{item.tournamentTeam?.name}</Select.Option>
+                <Select.Option key={item.id}>{item.name}</Select.Option>
               ))}
             </Select>
           </Form.Item>
