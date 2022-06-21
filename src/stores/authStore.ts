@@ -13,6 +13,7 @@ export class AuthStore {
     accessToken: "accessToken",
     userData: "userData",
     currentUserId: "currentUserId",
+    currentUserRole: "currentUserRole"
     // initialInfo: "initialInfo",
   };
 
@@ -21,6 +22,7 @@ export class AuthStore {
   refreshToken: string | null;
   userData: UserModel | null;
   currentUserId: number | null;
+  currentUserRole: number | null;
 
   constructor(root: RootStore) {
     makeAutoObservable(this);
@@ -29,6 +31,7 @@ export class AuthStore {
     this.refreshToken = localStorageHelpers.get(this.lsKeys.refreshToken) ?? null;
     this.userData = localStorageHelpers.get(this.lsKeys.userData) ?? null;
     this.currentUserId = localStorageHelpers.get(this.lsKeys.currentUserId) ?? null;
+    this.currentUserRole = localStorageHelpers.get(this.lsKeys.currentUserRole) ?? null;
   }
 
   async logOut(): Promise<void> {
@@ -37,6 +40,7 @@ export class AuthStore {
     this.setRefreshToken(null);
     this.setUserData(null);
     this.setCurrentUserId(null);
+    this.setCurrentUserRole(null);
   }
 
   setRefreshToken(token: string | null): void {
@@ -53,9 +57,15 @@ export class AuthStore {
     this.userData = userData;
     localStorageHelpers.set(this.lsKeys.userData, userData);
     this.setCurrentUserId(userData?.id ?? null);
+    this.setCurrentUserRole(userData?.role ?? null);
   }
 
   setCurrentUserId(currentUserId: number | null): void {
+    this.currentUserId = currentUserId;
+    localStorageHelpers.set(this.lsKeys.currentUserId, currentUserId);
+  }
+
+  setCurrentUserRole(currentUserId: number | null): void {
     this.currentUserId = currentUserId;
     localStorageHelpers.set(this.lsKeys.currentUserId, currentUserId);
   }
@@ -79,5 +89,9 @@ export class AuthStore {
 
   get getCurrentUserId(): number | null {
     return this.currentUserId;
+  }
+
+  get getCurrentUserRole(): number | null {
+    return this.currentUserRole;
   }
 }
