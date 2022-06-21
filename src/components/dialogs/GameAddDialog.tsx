@@ -33,7 +33,7 @@ export function GameAddDialog(props: IGameAddDialog) {
 
   const handleCreate = async () => {
     setIsLoading(true);
-    const r = await api.game.create(formState);
+    const r = await api.game.create({ ...formState, winningTeamId: formState.team1Id });
     setIsLoading(false);
     if (r == null) {
       showMessage("Что-то пошло не так", "Убедитесь, что данные заполнены верно", "error");
