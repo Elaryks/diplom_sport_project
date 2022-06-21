@@ -63,7 +63,7 @@ function Dialog(props: IPlayerEditViewDialog) {
     const r = await api.team.add2tournament({
       ...formState,
       // @ts-ignore
-      teamId: formState.id,
+      teamId: authStore.getUserData.teamId,
       tournamentId: props.itemId,
     } as TeamModel);
     if (r == null || r == false) {
