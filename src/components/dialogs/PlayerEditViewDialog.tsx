@@ -55,7 +55,7 @@ function Dialog(props: IPlayerEditViewDialog) {
   const setUserAsManager = async () => {
     if (formState == null) return;
     setIsLoading(true);
-    const r = await api.user.edit(formState?.id as number, { ...formState, role: 3 });
+    const r = await api.user.edit(formState?.id as number, { ...formState, role: 2 });
     setIsLoading(false);
     if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
