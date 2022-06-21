@@ -91,7 +91,7 @@ function Page() {
           />
         </Form.Item>
         <div className="flex-grow-1" />
-        {(authStore.getCurrentUserRole == 2 || authStore.getCurrentUserRole == 3) && (
+        {authStore.getCurrentUserRole == 1 && (
           <Form.Item label=" ">
             <Button type="primary" onClick={() => setIsAddDialogVisible(true)}>
               Добавить
