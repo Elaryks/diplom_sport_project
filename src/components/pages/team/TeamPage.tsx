@@ -56,7 +56,7 @@ function Page() {
       <TeamEditViewDialog
         isOpen={isRowDialogVisible}
         itemId={rowDialogItemId}
-        isEditMode={authStore.getCurrentUserId == rowDialogItemId}
+        isEditMode={authStore.getUserData?.teamId == rowDialogItemId}
         onSuccess={() => handleDataFetch()}
         onClose={() => {
           setIsRowDialogVisible(false);
