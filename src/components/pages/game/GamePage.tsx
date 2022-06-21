@@ -113,7 +113,7 @@ function Page() {
         name: "",
         team1: item.team1?.tournamentTeam?.name,
         team2: item.team2?.tournamentTeam?.name,
-        result: item.countPointsTeam1 ?? 0 + " - " + item.countPointsTeam2 ?? 0,
+        result: (item.countPointsTeam1 ?? 0) + " - " + (item.countPointsTeam2 ?? 0),
         date: moment(item.dateEvent)?.toDate().toLocaleDateString(),
       }))
     );
