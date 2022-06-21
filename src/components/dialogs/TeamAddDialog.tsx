@@ -29,6 +29,7 @@ export function TeamAddDialog(props: ITeamAddDialog) {
     }
     showMessage("Команда успешно добавлена", undefined, "success");
     props.onSuccess();
+    handleCancel();
   };
 
   const handleCancel = () => {
@@ -43,7 +44,7 @@ export function TeamAddDialog(props: ITeamAddDialog) {
   return (
     <Modal
       centered
-      title="Добавить место проведения"
+      title="Добавить команду"
       cancelText="Отмена"
       okText="Добавить"
       destroyOnClose

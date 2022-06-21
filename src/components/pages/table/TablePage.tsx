@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Input, Modal, Select, Table } from "antd";
+import { tableTableColumns } from "../../../constants/tableColumns/tableTable";
+import { api } from "../../../services";
+import { showMessage } from "../../../helpers/notifierHelpers";
 
 const AddTournamentDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -81,96 +84,35 @@ export function TablePage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
-  const columns = [
-    {
-      title: "Номер",
-      dataIndex: "index",
-      key: "index",
-      width: "1%",
-    },
-    {
-      title: "Команда",
-      dataIndex: "team",
-      key: "team",
-    },
-    {
-      title: "И",
-      dataIndex: "ga",
-      key: "ga",
-      // width: "1%",
-    },
-    {
-      title: "В",
-      dataIndex: "gw",
-      key: "gw",
-      // width: "1%",
-    },
-    {
-      title: "П",
-      dataIndex: "gl",
-      key: "gl",
-      // width: "1%",
-    },
-    // {
-    //   title: "%",
-    //   dataIndex: "p",
-    //   key: "p",
-    //   // width: "1%",
-    // },
-  ];
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const dataSource = [
-    {
-      key: "1",
-      index: "1",
-      team: "Хит",
-      ga: "82",
-      gw: "53",
-      gl: "29",
-    },
-    {
-      key: "2",
-      index: "2",
-      team: "Септикс",
-      ga: "82",
-      gw: "51",
-      gl: "31",
-    },
-    {
-      key: "3",
-      index: "3",
-      team: "Бакс",
-      ga: "82",
-      gw: "51",
-      gl: "31",
-    },
-    {
-      key: "4",
-      index: "4",
-      team: "Рэпторз",
-      ga: "82",
-      gw: "48",
-      gl: "34",
-    },
-    {
-      key: "5",
-      index: "5",
-      team: "Буллс",
-      ga: "82",
-      gw: "46",
-      gl: "36",
-    },
-  ];
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.teamInTournament.getAll();
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setData(
+      r.map((item, i) => ({
+        key: i,
+        index: i,
+        team: item.team?.name,
+        ga: item.countGames,
+        gw: item.countWins,
+        gl: item.countDefeats,
+      }))
+    );
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-stack-column spacing-2">
-      {AddTournamentDialog(
-        isAddDialogVisible,
-        () => {},
-        () => {
-          setIsAddDialogVisible(false);
-        }
-      )}
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
@@ -182,23 +124,21 @@ export function TablePage() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Соревнования">
-          <Select value="1" placeholder="" style={{ width: "150px" }}>
-            <Select.Option key="1">Все</Select.Option>
-            <Select.Option key="2">В гостях</Select.Option>
-            <Select.Option key="3">Дома</Select.Option>
+          <Select value="0" placeholder="" style={{ width: "150px" }}>
+            <Select.Option key="0">Все</Select.Option>
+            <Select.Option key="1">В гостях</Select.Option>
+            <Select.Option key="2">Дома</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item label="Команда">
           <Input placeholder="Название команды" style={{ width: "250px" }} />
         </Form.Item>
-        {/*<Button onClick={() => setIsAddDialogVisible(true)} className="ml-auto">*/}
-        {/*  Добавить*/}
-        {/*</Button>*/}
       </Form>
       <Divider />
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={data}
+        columns={tableTableColumns}
+        loading={isLoading}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {

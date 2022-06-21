@@ -24,7 +24,7 @@ export function SignupPage() {
     amplua: undefined,
     gender: undefined,
     teamId: undefined,
-    role: 0,
+    role: 1,
     isActivated: false,
   });
 

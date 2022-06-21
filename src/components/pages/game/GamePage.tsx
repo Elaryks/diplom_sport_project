@@ -111,7 +111,7 @@ export function GamePage() {
     <div className="d-stack-column spacing-2">
       <GameAddDialog
         isOpen={isAddDialogVisible}
-        onSuccess={() => setIsAddDialogVisible(false)}
+        onSuccess={() => handleDataFetch()}
         onClose={() => setIsAddDialogVisible(false)}
       />
       {RowDialog(

@@ -39,22 +39,32 @@ export function GameAddDialog(props: IGameAddDialog) {
     }
     showMessage("Матч успешно добавлен", undefined, "success");
     props.onSuccess();
+    handleCancel();
   };
 
   const handleDataFetch = async () => {
-    const r1 = await api.team.getAll();
-    if (r1 == null) {
+    const r = await api.tournament.getAll();
+    if (r == null) {
       showMessage("Что-то пошло не так", undefined, "error");
       return;
     }
-    setTeamArray(r1);
-    const r2 = await api.tournament.getAll();
-    if (r2 == null) {
-      showMessage("Что-то пошло не так", undefined, "error");
-      return;
-    }
-    setTournamentArray(r2);
+    setTournamentArray(r);
   };
+
+  const handleTeamsFetch = async (tournamentId: number) => {
+    setTeamArray([]);
+    const r = await api.team.getAll({ tournamentId });
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    setTeamArray(r);
+  };
+
+  useEffect(() => {
+    if (formState.tournamentId == null) return;
+    handleTeamsFetch(formState.tournamentId);
+  }, [formState.tournamentId]);
 
   const handleCancel = () => {
     if (isLoading) return;
@@ -76,7 +86,7 @@ export function GameAddDialog(props: IGameAddDialog) {
   return (
     <Modal
       centered
-      title="Добавить место проведения"
+      title="Добавить матч"
       cancelText="Отмена"
       okText="Добавить"
       destroyOnClose

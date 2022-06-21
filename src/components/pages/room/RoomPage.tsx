@@ -52,6 +52,11 @@ export function RoomPage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
+  const [tableFilters, setTableFilters] = useState({
+    roomName: "",
+    roomAddress: "",
+  });
+
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -82,8 +87,8 @@ export function RoomPage() {
     <div className="d-stack-column spacing-2">
       <RoomAddDialog
         isOpen={isAddDialogVisible}
+        onSuccess={() => handleDataFetch()}
         onClose={() => setIsAddDialogVisible(false)}
-        onSuccess={() => setIsAddDialogVisible(false)}
       />
       {RowDialog(
         isRowDialogVisible,
@@ -96,10 +101,30 @@ export function RoomPage() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Место проведения">
-          <Input placeholder="Название места проведения" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.roomName}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                roomName: event.currentTarget.value,
+              })
+            }
+            placeholder="Название места проведения"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <Form.Item label="Адрес">
-          <Input placeholder="Адрес места проведения" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.roomAddress}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                roomAddress: event.currentTarget.value,
+              })
+            }
+            placeholder="Адрес места проведения"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">
@@ -110,7 +135,11 @@ export function RoomPage() {
       </Form>
       <Divider />
       <Table
-        dataSource={data}
+        dataSource={data.filter(
+          (item) =>
+            item.name.toLowerCase().includes(tableFilters.roomName.toLowerCase()) &&
+            item.city.toLowerCase().includes(tableFilters.roomAddress.toLowerCase())
+        )}
         loading={isLoading}
         columns={roomTableColumns}
         onRow={(record, rowIndex) => {

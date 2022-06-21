@@ -31,6 +31,7 @@ export function RoomAddDialog(props: IRoomAddDialog) {
     }
     showMessage("Место проведения успешно добавлено", undefined, "success");
     props.onSuccess();
+    handleCancel();
   };
 
   const handleCancel = () => {

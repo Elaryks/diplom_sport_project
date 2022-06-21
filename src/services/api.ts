@@ -5,6 +5,7 @@ import {
   GameController,
   LocationController,
   TeamController,
+  TeamInTournamentController,
   TournamentController,
   UserController,
 } from "../api/controllers";
@@ -16,6 +17,7 @@ class Api {
   public team: TeamController;
   public game: GameController;
   public tournament: TournamentController;
+  public teamInTournament: TeamInTournamentController;
 
   constructor(axios: AxiosInstance) {
     this.auth = new AuthController(axios);
@@ -24,6 +26,7 @@ class Api {
     this.team = new TeamController(axios);
     this.game = new GameController(axios);
     this.tournament = new TournamentController(axios);
+    this.teamInTournament = new TeamInTournamentController(axios);
   }
 }
 

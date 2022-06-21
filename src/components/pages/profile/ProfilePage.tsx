@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, DatePicker, Form, Input, notification, Select, Spin, Typography } from "antd";
+import { Button, DatePicker, Form, Input, Select, Spin, Typography } from "antd";
 import { FiAtSign, FiLock, FiUser } from "react-icons/fi";
 import { UserModel } from "../../../api/models/userModel";
 import { api } from "../../../services";
 import moment from "moment";
 import { useRootStore } from "../../../hooks/useRootStore";
 import { observer } from "mobx-react-lite";
+import { showMessage } from "../../../helpers/notifierHelpers";
 
 function Page() {
   const { authStore } = useRootStore();
@@ -18,7 +19,7 @@ function Page() {
     const r = await api.user.edit(data?.id as number, data as UserModel);
     setIsLoading(false);
     if (r == null) {
-      openNotification();
+      showMessage("Что-то пошло не так", undefined, "error");
       return;
     }
     await handleDataFetch();
@@ -30,19 +31,10 @@ function Page() {
     const r = await api.user.getById(authStore.getCurrentUserId as number);
     setIsLoading(false);
     if (r == null) {
-      openNotification();
+      showMessage("Что-то пошло не так", undefined, "error");
       return;
     }
     setData({ ...r, password: undefined });
-  };
-
-  const openNotification = () => {
-    // Функция для показа оповещения
-    notification["error"]({
-      message: "Ошибка",
-      description: "Что-то пошло не так",
-      placement: "bottomRight",
-    });
   };
 
   useEffect(() => {

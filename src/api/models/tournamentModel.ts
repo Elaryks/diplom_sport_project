@@ -1,4 +1,5 @@
 import { GameModel } from "./gameModel";
+import { UserModel } from "./userModel";
 
 export type TournamentModel = {
   id?: number;
@@ -6,6 +7,7 @@ export type TournamentModel = {
   address?: string;
   userId?: number;
   games?: GameModel[];
+  creator?: UserModel;
   createdAt?: Date;
   updatedAt?: Date;
 };

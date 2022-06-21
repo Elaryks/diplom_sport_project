@@ -140,6 +140,11 @@ export function TeamPage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
+  const [tableFilters, setTableFilters] = useState({
+    teamName: "",
+    teamAddress: "",
+  });
+
   const [data, setData] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -169,7 +174,7 @@ export function TeamPage() {
     <div className="d-stack-column spacing-2">
       <TeamAddDialog
         isOpen={isAddDialogVisible}
-        onSuccess={() => setIsAddDialogVisible(false)}
+        onSuccess={() => handleDataFetch()}
         onClose={() => setIsAddDialogVisible(false)}
       />
       {RowDialog(
@@ -183,10 +188,30 @@ export function TeamPage() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Команда">
-          <Input placeholder="Название команды" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.teamName}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                teamName: event.currentTarget.value,
+              })
+            }
+            placeholder="Название команды"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <Form.Item label="Адрес">
-          <Input placeholder="Адрес" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.teamAddress}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                teamAddress: event.currentTarget.value,
+              })
+            }
+            placeholder="Адрес"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">
@@ -197,7 +222,11 @@ export function TeamPage() {
       </Form>
       <Divider />
       <Table
-        dataSource={data}
+        dataSource={data.filter(
+          (item) =>
+            item.name.toLowerCase().includes(tableFilters.teamName.toLowerCase()) &&
+            item.city.toLowerCase().includes(tableFilters.teamAddress.toLowerCase())
+        )}
         loading={isLoading}
         columns={teamTableColumns}
         onRow={(record, rowIndex) => {

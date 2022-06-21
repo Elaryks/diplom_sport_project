@@ -1,36 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Divider, Form, Input, Modal, Table } from "antd";
-
-const AddTournamentDialog = (open: boolean, handleOk: () => void, handleCancel: () => void) => {
-  return (
-    <Modal
-      centered
-      title="Добавить соревнование"
-      cancelText="Отмена"
-      okText="Добавить"
-      visible={open}
-      onOk={handleOk}
-      onCancel={handleCancel}
-      footer={
-        <>
-          {/*<Button danger style={{ float: "left" }}>*/}
-          {/*  Удалить*/}
-          {/*</Button>*/}
-          <Button onClick={() => handleCancel()}>Отмена</Button>
-          <Button onClick={() => handleOk()} type="primary">
-            Добавить
-          </Button>
-        </>
-      }
-    >
-      <Form layout="vertical">
-        <Form.Item label="Название">
-          <Input placeholder="Название" />
-        </Form.Item>
-      </Form>
-    </Modal>
-  );
-};
+import { tournamentTableColumns } from "../../../constants/tableColumns/tournamentTable";
+import { api } from "../../../services";
+import { showMessage } from "../../../helpers/notifierHelpers";
+import { TournamentModel } from "../../../api/models/tournamentModel";
+import { TournamentAddDialog } from "../../dialogs/TournamentAddDialog";
 
 const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel: () => void) => {
   return (
@@ -59,12 +33,6 @@ const RowDialog = (open: boolean, state: any, handleOk: () => void, handleCancel
           <Form.Item label="Название">
             <Input value={state.name} placeholder="Название" />
           </Form.Item>
-          {/*<Form.Item label="Организатор">*/}
-          {/*  <Input value={state.manager} placeholder="Организатор" />*/}
-          {/*</Form.Item>*/}
-          {/*<Form.Item label="Количество команд">*/}
-          {/*  <Input value={state.teams} placeholder="Количество команд" />*/}
-          {/*</Form.Item>*/}
         </Form>
       )}
     </Modal>
@@ -76,66 +44,58 @@ export function TournamentPage() {
   const [isRowDialogVisible, setIsRowDialogVisible] = useState<boolean>(false);
   const [rowDialogState, setRowDialogState] = useState<any>(null);
 
-  const columns = [
-    {
-      title: "Название",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Организатор",
-      dataIndex: "manager",
-      key: "manager",
-    },
-    {
-      title: "Количество команд",
-      dataIndex: "teams",
-      key: "teams",
-    },
-  ];
+  const [tableFilters, setTableFilters] = useState({
+    tournamentName: "",
+    tournamentCreator: "",
+  });
 
-  const dataSource = [
-    {
-      key: "1",
-      name: "Финал - Запад",
-      manager: "Селтикс",
-      teams: "23",
-    },
-    {
-      key: "2",
-      name: "Финал - Восток",
-      manager: "Хьюстон Рокетс",
-      teams: "12",
-    },
-    {
-      key: "3",
-      name: "Финал - Запад",
-      manager: "Портленд Трэйл Блэйзерс",
-      teams: "10",
-    },
-    {
-      key: "4",
-      name: "Финал - Запад",
-      manager: "Оклахома-Сити Тандер",
-      teams: "31",
-    },
-    {
-      key: "5",
-      name: "Финал - Восток",
-      manager: "Бруклин Нетс",
-      teams: "10",
-    },
-  ];
+  const [data, setData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  const handleDataFetch = async () => {
+    setIsLoading(true);
+    const r = await api.tournament.getAll();
+    setIsLoading(false);
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return;
+    }
+    const d = r.map((item) => generateTableRow(item));
+    const data = await Promise.all(d);
+    setData(data);
+  };
+
+  const generateTableRow = async (item: TournamentModel) => {
+    const gamesLength = await getGamesInTournamentById(item.id as number);
+    return {
+      key: item.id,
+      name: item.name,
+      manager:
+        (item.creator?.lastName ?? "") + " " + (item.creator?.firstName ?? "") + " " + (item.creator?.middleName ?? ""),
+      teams: gamesLength ?? 0,
+    };
+  };
+
+  const getGamesInTournamentById = async (tournamentId: number): Promise<number> => {
+    const r = await api.game.getAll({ tournamentId });
+    if (r == null) {
+      showMessage("Что-то пошло не так", undefined, "error");
+      return 0;
+    }
+    return r.length;
+  };
+
+  useEffect(() => {
+    handleDataFetch();
+  }, []);
 
   return (
     <div className="d-stack-column spacing-2">
-      {AddTournamentDialog(
-        isAddDialogVisible,
-        () => {},
-        () => {
-          setIsAddDialogVisible(false);
-        }
-      )}
+      <TournamentAddDialog
+        isOpen={isAddDialogVisible}
+        onSuccess={() => handleDataFetch()}
+        onClose={() => setIsAddDialogVisible(false)}
+      />
       {RowDialog(
         isRowDialogVisible,
         rowDialogState,
@@ -147,10 +107,30 @@ export function TournamentPage() {
       )}
       <Form style={{ width: "100%" }} className="d-stack spacing-2 no-margin-form" layout="vertical">
         <Form.Item label="Соревнование">
-          <Input placeholder="Название соревнования" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.tournamentName}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                tournamentName: event.currentTarget.value,
+              })
+            }
+            placeholder="Название соревнования"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <Form.Item label="Организатор">
-          <Input placeholder="ФИО организатора" style={{ width: "250px" }} />
+          <Input
+            value={tableFilters.tournamentCreator}
+            onInput={(event: React.FormEvent<HTMLInputElement>) =>
+              setTableFilters({
+                ...tableFilters,
+                tournamentCreator: event.currentTarget.value,
+              })
+            }
+            placeholder="ФИО организатора"
+            style={{ width: "250px" }}
+          />
         </Form.Item>
         <div className="flex-grow-1" />
         <Form.Item label=" ">
@@ -161,8 +141,13 @@ export function TournamentPage() {
       </Form>
       <Divider />
       <Table
-        dataSource={dataSource}
-        columns={columns}
+        dataSource={data.filter(
+          (item) =>
+            item.name.toLowerCase().includes(tableFilters.tournamentName.toLowerCase()) &&
+            item.manager.toLowerCase().includes(tableFilters.tournamentCreator.toLowerCase())
+        )}
+        columns={tournamentTableColumns}
+        loading={isLoading}
         onRow={(record, rowIndex) => {
           return {
             onClick: (event) => {
